@@ -3,10 +3,7 @@ import React, { useEffect } from 'react';
 import { PiCursor, PiCursorFill, PiPencilSimpleLineBold, PiTextTLight, PiShapesBold } from "react-icons/pi";
 import { LuUndo, LuRedo } from "react-icons/lu";
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
-import { Tools } from '../whiteboard/page';
-import { FloatingDelayGroup } from '@floating-ui/react';
-
-import dynamic from 'next/dynamic'
+import { Tools } from '../enums/tools';
 
 const Toolbar: React.FC = ({ selectedTool, setSelectedTool }) => {
   const defaultButtonClassname = "hover:bg-stone-200 rounded p-1 m-1";
@@ -17,8 +14,8 @@ const Toolbar: React.FC = ({ selectedTool, setSelectedTool }) => {
   const verticalBarClassname = commonBarClassname + " flex-col justify-center fixed left-2 top-1/4"
 
   return (
-    <div className={horizontalBarClassname}>
-      <div className="bg-white rounded-md flex mr-2 shadow-md">
+    <div className={verticalBarClassname}>
+      <div className="bg-white rounded-md flex flex-col mb-2 shadow-md">
         <Tooltip>
           <TooltipTrigger>
             <button onClick={() => setSelectedTool(Tools.Select)} className={selectedTool == Tools.Select ? selectedToolClassname : defaultButtonClassname}>
@@ -66,7 +63,7 @@ const Toolbar: React.FC = ({ selectedTool, setSelectedTool }) => {
           <TooltipContent className="Tooltip">Add form</TooltipContent>
         </Tooltip>
       </div>
-      <div className="bg-white rounded-md flex shadow-md">
+      <div className="bg-white rounded-md flex flex-col shadow-md">
         <Tooltip>
           <TooltipTrigger>
             <button className={defaultButtonClassname}>

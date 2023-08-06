@@ -5,14 +5,8 @@ import NavigationBar from '../components/navigationBar'
 import DrawingZone from '../components/drawingZone'
 import WhiteboardBar from '../components/whiteboardBar'
 import React from 'react'
+import { Tools } from '../enums/tools'
 
-export enum Tools{
-    Select,
-    Pencil,
-    Eraser,
-    Text,
-    Form
-}
 export default function Whiteboard() {
   const [selectedTool, setSelectedTool] = React.useState(Tools.Select);
   
