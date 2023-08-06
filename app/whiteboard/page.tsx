@@ -19,7 +19,7 @@ export default function Whiteboard() {
     <main className="flex min-h-screen flex-col items-center justify-between">
       <NavigationBar></NavigationBar>
       <WhiteboardBar></WhiteboardBar>
-      <DrawingZone selectedTool={selectedTool}></DrawingZone>
+      <DrawingZone selectedTool={selectedTool} setSelectedTool={changeTool}></DrawingZone>
       <Toolbar selectedTool={selectedTool} setSelectedTool={changeTool} ></Toolbar>
     </main>
   )

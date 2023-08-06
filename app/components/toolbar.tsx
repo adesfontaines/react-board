@@ -5,7 +5,12 @@ import { LuUndo, LuRedo } from "react-icons/lu";
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
 import { Tools } from '../enums/tools';
 
-const Toolbar: React.FC = ({ selectedTool, setSelectedTool }) => {
+interface ToolbarProps {
+  selectedTool: Tools;
+  setSelectedTool: (tool: Tools) => void;
+}
+
+const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool }) => {
   const defaultButtonClassname = "hover:bg-stone-200 rounded p-1 m-1";
   const selectedToolClassname = "bg-stone-200 rounded p-1 m-1 border-1 border-black";
 

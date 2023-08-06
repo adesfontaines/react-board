@@ -1,57 +1,70 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react';
-import { Tools } from '../whiteboard/page';
+import { Tools } from '../enums/tools';
 
-const DrawingZone: React.FC = ({selectedTool}) => {
+interface DrawingZoneProps {
+    selectedTool: Tools;
+    setSelectedTool: (tool: Tools) => void;
+  }
+
+const DrawingZone: React.FC<DrawingZoneProps>  = ({selectedTool, setSelectedTool}) => {
     const canvasRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
     let scale = 1.0;
     useEffect(() => {
-        const canvas = canvasRef.current;
-        if(canvas)
+        if(canvasRef)
         {
+        const canvas = canvasRef.current as unknown as HTMLCanvasElement;
 
-        const context = canvas.getContext('2d');
-        context.lineWidth = 3;
-        context.lineCap = 'round';
-        context.strokeStyle = 'black';
+        const context = (canvas as HTMLCanvasElement).getContext('2d');
 
-        canvas.oncontextmenu = function () {
-            return false;
+        if(context)
+        {
+            context.lineWidth = 3;
+            context.lineCap = 'round';
+            context.strokeStyle = 'black';
+    
+            canvas.oncontextmenu = function () {
+                return false;
+            }
+            canvas.width= window.innerWidth;
+            canvas.height=window.innerHeight;
+            
+          
+              window.addEventListener('resize', handleResize);
+          
+              return () => {
+                window.removeEventListener('resize', handleResize);
+              };
+            }
         }
-        canvas.width= window.innerWidth;
-        canvas.height=window.innerHeight;
-        
-        function handleResize() {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-          }
-      
-          window.addEventListener('resize', handleResize);
-      
-          return () => {
-            window.removeEventListener('resize', handleResize);
-          };
-        }
+   
 
     }, []);
 
-    const handleMouseDown = (event) => {
-        if(selectedTool == Tools.Pencil)
+    const handleResize = () => {
+        const canvas = canvasRef.current as unknown as HTMLCanvasElement;
+        const context = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+    const handleMouseDown = (event: { clientX: number; clientY: number; }) => {
+        if(selectedTool == Tools.Pencil && canvasRef.current)
         {
+            const canvas = canvasRef.current as HTMLCanvasElement;
             setIsDrawing(true);
             setPrevPosition({
-                x: event.clientX - canvasRef.current.offsetLeft,
-                y: event.clientY - canvasRef.current.offsetTop,
+                x: event.clientX - canvas.offsetLeft,
+                y: event.clientY - canvas.offsetTop,
             });
         }
     };
 
-    const handleMouseMove = (event) => {
-        if (!isDrawing) return;
+    const handleMouseMove = (event: { clientX: number; clientY: number; }) => {
+        if (!isDrawing || !canvasRef.current) return;
 
-        const canvas = canvasRef.current;
+        const canvas = canvasRef.current as HTMLCanvasElement;
         const context = canvas.getContext('2d');
 
         const currentPosition = {
@@ -59,12 +72,14 @@ const DrawingZone: React.FC = ({selectedTool}) => {
             y: event.clientY - canvas.offsetTop,
         };
 
-        context.beginPath();
-        context.moveTo(prevPosition.x, prevPosition.y);
-        context.lineTo(currentPosition.x, currentPosition.y);
-        context.stroke();
-
-        setPrevPosition(currentPosition);
+        if(context)
+        {
+            context.beginPath();
+            context.moveTo(prevPosition.x, prevPosition.y);
+            context.lineTo(currentPosition.x, currentPosition.y);
+            context.stroke();
+            setPrevPosition(currentPosition);
+        }
     };
 
     const handleMouseUp = () => {

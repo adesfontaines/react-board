@@ -143,10 +143,6 @@ export const TooltipTrigger = React.forwardRef<
   : ''
 });
 
-export const DynamicTooltipTrigger = dynamic(() => import('./tooltip'), {
-  ssr: false, // Ensure that the component is not rendered on the server side
-});
-
 export const TooltipContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLProps<HTMLDivElement>
