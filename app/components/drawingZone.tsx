@@ -1,12 +1,12 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react';
+import { Tools } from '../whiteboard/page';
 
-const DrawingZone: React.FC = () => {
+const DrawingZone: React.FC = ({selectedTool}) => {
     const canvasRef = useRef(null);
-    const drawingMode = useState('pencil');
     const [isDrawing, setIsDrawing] = useState(false);
     const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
-
+    let scale = 1.0;
     useEffect(() => {
         const canvas = canvasRef.current;
         if(canvas)
@@ -17,6 +17,9 @@ const DrawingZone: React.FC = () => {
         context.lineCap = 'round';
         context.strokeStyle = 'black';
 
+        canvas.oncontextmenu = function () {
+            return false;
+        }
         canvas.width= window.innerWidth;
         canvas.height=window.innerHeight;
         
@@ -35,11 +38,14 @@ const DrawingZone: React.FC = () => {
     }, []);
 
     const handleMouseDown = (event) => {
-        setIsDrawing(true);
-        setPrevPosition({
-            x: event.clientX - canvasRef.current.offsetLeft,
-            y: event.clientY - canvasRef.current.offsetTop,
-        });
+        if(selectedTool == Tools.Pencil)
+        {
+            setIsDrawing(true);
+            setPrevPosition({
+                x: event.clientX - canvasRef.current.offsetLeft,
+                y: event.clientY - canvasRef.current.offsetTop,
+            });
+        }
     };
 
     const handleMouseMove = (event) => {
@@ -70,6 +76,7 @@ const DrawingZone: React.FC = () => {
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            onMouseOut={handleMouseUp}
         />
     );
 };

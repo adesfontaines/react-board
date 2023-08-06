@@ -12,12 +12,11 @@ import {
   useDismiss,
   useRole,
   useInteractions,
-  useTransitionStyles,
   useMergeRefs,
   FloatingPortal,
-  FloatingArrow
 } from "@floating-ui/react";
 import type { Placement } from "@floating-ui/react";
+import dynamic from 'next/dynamic';
 
 interface TooltipOptions {
   initialOpen?: boolean;
@@ -34,7 +33,6 @@ export function useTooltip({
 }: TooltipOptions = {}) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(initialOpen);
 
-  const arrowRef = React.useRef(null);
   const open = controlledOpen ?? uncontrolledOpen;
   const setOpen = setControlledOpen ?? setUncontrolledOpen;
 
@@ -49,9 +47,6 @@ export function useTooltip({
         crossAxis: placement.includes("-"),
         fallbackAxisSideDirection: "start",
         padding: 5
-      }),
-      arrow({
-        element: arrowRef
       }),
       shift({ padding: 5 })
     ]
@@ -118,6 +113,12 @@ export const TooltipTrigger = React.forwardRef<
   const childrenRef = (children as any).ref;
   const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
 
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // `asChild` allows the user to pass any element as the anchor
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(
@@ -130,8 +131,7 @@ export const TooltipTrigger = React.forwardRef<
       })
     );
   }
-
-  return (
+  return isMounted ?
     <button
       ref={ref}
       // The user can style the trigger based on the state
@@ -140,7 +140,11 @@ export const TooltipTrigger = React.forwardRef<
     >
       {children}
     </button>
-  );
+  : ''
+});
+
+export const DynamicTooltipTrigger = dynamic(() => import('./tooltip'), {
+  ssr: false, // Ensure that the component is not rendered on the server side
 });
 
 export const TooltipContent = React.forwardRef<
@@ -156,7 +160,6 @@ export const TooltipContent = React.forwardRef<
     <FloatingPortal>
       <div
         ref={ref}
-        className="tooltip-content"
         style={{
           ...context.floatingStyles,
           ...style
