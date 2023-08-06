@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react';
-import { PiCursor, PiCursorFill, PiPencilSimpleLineBold, PiTextTLight, PiShapesBold } from "react-icons/pi";
+import { PiCursor, PiCursorFill, PiEraser, PiEraserFill, PiPencilSimpleLineDuotone, PiPencilSimpleLineFill, PiTextTLight, PiTextTBold, PiShapesBold } from "react-icons/pi";
 import { LuUndo, LuRedo } from "react-icons/lu";
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
 import { Tools } from '../enums/tools';
@@ -35,7 +35,9 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool }) => {
         <Tooltip>
           <TooltipTrigger>
             <button onClick={() => setSelectedTool(Tools.Pencil)} className={selectedTool == Tools.Pencil ? selectedToolClassname : defaultButtonClassname}>
-              <PiPencilSimpleLineBold size={32}></PiPencilSimpleLineBold>
+            {selectedTool == Tools.Pencil ?
+                <PiPencilSimpleLineFill size={32}></PiPencilSimpleLineFill> :
+                <PiPencilSimpleLineDuotone size={32}></PiPencilSimpleLineDuotone>}
             </button>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">Inking</TooltipContent>
@@ -44,7 +46,9 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool }) => {
         <Tooltip>
           <TooltipTrigger>
             <button onClick={() => setSelectedTool(Tools.Eraser)} className={selectedTool == Tools.Eraser ? selectedToolClassname : defaultButtonClassname}>
-              <PiPencilSimpleLineBold size={32}></PiPencilSimpleLineBold>
+            {selectedTool == Tools.Eraser ?
+                <PiEraserFill size={32}></PiEraserFill> :
+                <PiEraser size={32}></PiEraser>}
             </button>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">Eraser</TooltipContent>
@@ -53,7 +57,9 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool }) => {
         <Tooltip>
           <TooltipTrigger>
             <button onClick={() => setSelectedTool(Tools.Text)} className={selectedTool == Tools.Text ? selectedToolClassname : defaultButtonClassname}>
-              <PiTextTLight size={32}></PiTextTLight>
+            {selectedTool == Tools.Text ?
+                <PiTextTBold size={32}></PiTextTBold> :
+                <PiTextTLight size={32}></PiTextTLight>}
             </button>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">Add text</TooltipContent>

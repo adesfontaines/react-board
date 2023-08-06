@@ -3,7 +3,7 @@ import React from 'react';
 
 const NavigationBar: React.FC = () => {
   return (
-    <div className="top-0 left-0 w-full  shadow-md flex items-center justify-between p-2 bg-stone-700 text-white">
+    <div className="z-10 top-0 left-0 w-full  shadow-md flex items-center justify-between p-2 bg-stone-700 text-white">
     <Link href="/" className="flex items-center">
       <h2>Whiteboard</h2>
     </Link>
