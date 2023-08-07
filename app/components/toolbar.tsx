@@ -11,11 +11,9 @@ import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from './popOver
 interface ToolbarProps {
   selectedTool: Tools;
   setSelectedTool: (tool: Tools) => void;
-  historyPosition: number;
-  setHistoryPosition: (history: number) => void;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, historyPosition, setHistoryPosition }) => {
+const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool }) => {
   const defaultButtonClassname = "hover:bg-stone-200 rounded p-1 m-1";
   const selectedToolClassname = "bg-stone-200 rounded p-1 m-1 border-1 border-black";
 

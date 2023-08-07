@@ -1,22 +1,27 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Ref, RefObject, useEffect, useRef, useState } from 'react';
 import { Tools } from '../enums/tools';
 
 interface DrawingZoneProps {
     selectedTool: Tools;
     drawings: any[];
-    historyPosition: number;
     setDrawings: (tool: any[]) => void;
     zoom: number;
     setZoom: (zoom: number) => void;
+    ref: React.ForwardedRef<unknown>;
 }
 
-const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDrawings, historyPosition, zoom, setZoom }) => {
-    const canvasRef = useRef(null);
+const DrawingZone: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneProps> = (
+    { selectedTool, drawings, setDrawings, zoom, setZoom },
+    ref
+) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isDrawing, setIsDrawing] = useState(false);
 
     const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
     const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+    // Pass the ref object to useImperativeHandle
 
     useEffect(() => {
         if (canvasRef) {
@@ -24,9 +29,10 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
             const context = (canvas as HTMLCanvasElement).getContext('2d');
 
             if (context) {
-                context.lineWidth = 3;
+                context.lineWidth = 4;
                 context.lineCap = 'round';
                 context.strokeStyle = 'black';
+
                 // Set text style properties
                 context.fillStyle = 'black';
                 context.font = '32px Arial';
@@ -36,24 +42,18 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
                 return false;
             }
 
-            redrawCanvas();
+            updateCanvas();
 
-            window.addEventListener('resize', redrawCanvas);
+            window.addEventListener('resize', updateCanvas);
 
             return () => {
-                window.removeEventListener('resize', redrawCanvas);
+                window.removeEventListener('resize', updateCanvas);
             };
         }
 
 
     }, []);
 
-    const toScreenX = (xTrue: number) => {
-        return (xTrue + offset.x) * zoom;
-    }
-    const toScreenY = (yTrue: number) => {
-        return (yTrue + offset.y) * zoom;
-    }
     const toTrueX = (xScreen: number) => {
         return (xScreen / zoom) - offset.x;
     }
@@ -71,40 +71,71 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
         context.lineTo(x1, y1);
         context.stroke();
     }
-    const redrawCanvas = () => {
+    const updateCanvas = () => {
         const canvas = canvasRef.current as unknown as HTMLCanvasElement;
         const context = (canvas as HTMLCanvasElement).getContext('2d');
 
-        if (context) {
-            // set the canvas to the size of the window
-            canvas.width = document.body.clientWidth;
-            canvas.height = document.body.clientHeight;
-            for (let i = 0; i < drawings.length; i++) {
-                const draw = drawings[i];
-                if (draw.text) {
-                    context.fillText(draw.text, toScreenX(draw.x0), toScreenY(draw.y0));
-                }
-                else {
-                    drawLine(toScreenX(draw.x0), toScreenY(draw.y0), toScreenX(draw.x1), toScreenY(draw.y1));
-                }
-            };
-        }
+        if (!context) return;
+
+        // set the canvas to the size of the window
+        canvas.width = document.body.clientWidth;
+        canvas.height = document.body.clientHeight;
+
+        context.scale(zoom, zoom);
+        context.translate(offset.x, offset.y);
+
+        for (let i = 0; i < drawings.length; i++) {
+            const draw = drawings[i];
+            if (draw.text) {
+                context.fillText(draw.text, draw.x0, draw.y0);
+            }
+            else {
+                drawLine(draw.x0, draw.y0, draw.x1, draw.y1);
+            }
+        };
+
     }
+
+    React.useImperativeHandle(ref, () => refObject);
+
+    const refObject: any = {
+        updateCanvas: updateCanvas
+    };
 
     const handleMouseDown = (event: { clientX: number; clientY: number; }) => {
         const canvas = canvasRef.current as unknown as HTMLCanvasElement;
+        const currentPosition = {
+            x: event.clientX - canvas.offsetLeft,
+            y: event.clientY - canvas.offsetTop,
+        };
+
         setIsDrawing(true);
         setPrevPosition({
             x: event.clientX - canvas.offsetLeft,
             y: event.clientY - canvas.offsetTop,
         });
+
+        if (selectedTool == Tools.Text) {
+            const scaledX = toTrueX(currentPosition.x);
+            const scaledY = toTrueY(currentPosition.y);
+
+            const text = 'Hello world !'; // Replace with the text you want to add
+            setDrawings([
+                ...drawings,
+                { text: text, x0: scaledX, y0: scaledY }
+            ]);
+
+            const context = (canvas as HTMLCanvasElement).getContext('2d');
+
+            // Draw the text on the canvas
+            context?.fillText(text, scaledX, scaledY);
+        }
     };
 
     const handleMouseMove = (event: { clientX: number; clientY: number; }) => {
         if (!isDrawing || !canvasRef.current) return;
 
         const canvas = canvasRef.current as HTMLCanvasElement;
-        const context = (canvas as HTMLCanvasElement).getContext('2d');
 
         const currentPosition = {
             x: event.clientX - canvas.offsetLeft,
@@ -116,16 +147,15 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
         const prevScaledX = toTrueX(prevPosition.x);
         const prevScaledY = toTrueY(prevPosition.y);
 
-
         switch (selectedTool) {
             case Tools.Pencil:
                 // add the line to our drawing history
-                setDrawings((prevDrawings: any[]) => [
-                    ...prevDrawings,
-                    { x0: prevScaledX, y0: prevScaledY, x1: scaledX, y1: scaledY },
+                setDrawings([
+                    ...drawings,
+                    { x0: prevScaledX, y0: prevScaledY, x1: scaledX, y1: scaledY }
                 ]);
                 // draw a line
-                drawLine(prevPosition.x, prevPosition.y, currentPosition.x, currentPosition.y);
+                drawLine(prevScaledX, prevScaledY, scaledX, scaledY);
                 break;
             case Tools.Select:
                 // move the screen
@@ -133,11 +163,11 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
                     x: offset.x + (currentPosition.x - prevPosition.x) / zoom,
                     y: offset.y + (currentPosition.y - prevPosition.y) / zoom
                 });
-                redrawCanvas();
+                updateCanvas();
                 break;
             case Tools.Eraser:
                 // Remove lines within a certain range from the current position
-                const radius = 3; // Adjust this value as needed
+                const radius = 6; // Adjust this value as needed
                 const linesToRemove = drawings.filter((line) => {
                     const distance = Math.sqrt(
                         Math.pow(toTrueX(prevPosition.x) - line.x0, 2) +
@@ -145,22 +175,9 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
                     );
                     return distance <= radius;
                 });
-                setDrawings((prevDrawings) => prevDrawings.filter((line) => !linesToRemove.includes(line)));
-                redrawCanvas();
+                setDrawings(drawings.filter((line) => !linesToRemove.includes(line)));
+                updateCanvas();
                 break;
-            case Tools.Text:
-                const text = 'Your text here'; // Replace with the text you want to add
-                const scaledX = toTrueX(currentPosition.x);
-                const scaledY = toTrueY(currentPosition.y);
-
-                setDrawings((prevDrawings) => [
-                    ...prevDrawings,
-                    { text: text, x0: scaledX, y0: scaledY },
-                ]);
-
-                // Draw the text on the canvas
-                context?.fillText(text, currentPosition.x, currentPosition.y);
-
         };
         setPrevPosition(currentPosition);
 
@@ -176,13 +193,13 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
         const scaleAmount = -deltaY / 500;
         let newZoom = zoom * (1 + scaleAmount);
 
-        if(newZoom < 0.1)
-        newZoom = 0.1;
-        
-        if(newZoom > 4)
-        newZoom = 4;
+        if (newZoom < 0.25)
+            newZoom = 0.25;
 
-        if(newZoom== zoom) return;
+        if (newZoom > 5)
+            newZoom = 5;
+
+        if (newZoom == zoom) return;
 
         setZoom(newZoom);
         // zoom the page based on where the cursor is
@@ -201,7 +218,7 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
             y: offset.y - unitsAddTop
         })
 
-        redrawCanvas();
+        updateCanvas();
     }
 
 
@@ -218,7 +235,7 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
         }
     };
     return (
-        <canvas className={cursorStyle() + " fixed top-0 left-0 absolute w-full h-full bg-gray-200"}
+        <canvas className={cursorStyle() + " fixed top-0 left-0 absolute w-full h-full bg-slate-100"}
             ref={canvasRef}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
@@ -228,5 +245,5 @@ const DrawingZone: React.FC<DrawingZoneProps> = ({ selectedTool, drawings, setDr
         />
     );
 };
-
+DrawingZone.displayName = 'DrawingZone';
 export default DrawingZone;
