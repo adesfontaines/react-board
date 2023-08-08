@@ -1,6 +1,8 @@
 {
-    "toolbarSelectTooltip": "Select Hello",
+    "toolbarSelectTooltip": "Select",
     "toolbarPencilTooltip": "Inking",
     "toolbarEraserTooltip": "Eraser",
+    "toolbarTextTooltip": "Add text",
+    "loginCaption": "Login",
     "newDashboard": "New Dashboard"
 }

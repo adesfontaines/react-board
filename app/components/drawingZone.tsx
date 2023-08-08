@@ -9,19 +9,20 @@ interface DrawingZoneProps {
     zoom: number;
     setZoom: (zoom: number) => void;
     ref: React.ForwardedRef<unknown>;
-}
-
-const DrawingZone: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneProps> = (
-    { selectedTool, drawings, setDrawings, zoom, setZoom },
-    ref
-) => {
+  }
+  
+  // eslint-disable-next-line react/display-name
+  const DrawingZone: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneProps> = React.forwardRef(
+    ({ selectedTool, drawings, setDrawings, zoom, setZoom }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isDrawing, setIsDrawing] = useState(false);
 
     const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
     const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-    // Pass the ref object to useImperativeHandle
+    React.useImperativeHandle(ref, () => ({
+        updateCanvas,
+    }));
 
     useEffect(() => {
         if (canvasRef) {
@@ -95,12 +96,6 @@ const DrawingZone: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZone
         };
 
     }
-
-    React.useImperativeHandle(ref, () => refObject);
-
-    const refObject: any = {
-        updateCanvas: updateCanvas
-    };
 
     const handleMouseDown = (event: { clientX: number; clientY: number; }) => {
         const canvas = canvasRef.current as unknown as HTMLCanvasElement;
@@ -244,6 +239,6 @@ const DrawingZone: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZone
             onWheel={handleMouseWheel}
         />
     );
-};
-DrawingZone.displayName = 'DrawingZone';
+});
+
 export default DrawingZone;

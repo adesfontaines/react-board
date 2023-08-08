@@ -14,7 +14,7 @@ const WhiteboardList: React.FC = () => {
           </Link>
 
         {items.map((item, index) => (
-          <Link key={index} href="/whiteboard">
+          <Link key={index} href="en/whiteboard">
             <div className="shadow-md rounded hover:ring-4 w-56 h-44 bg-white flex flex-col font-semibold">
               <div className="rounded-t w-full bg-gray-300 h-40"></div>
                 <div className="p-2 shadow-inner">

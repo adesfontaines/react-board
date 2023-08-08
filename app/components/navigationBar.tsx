@@ -1,20 +1,29 @@
+'use client'
 import Link from 'next/link';
 import React from 'react';
+import { Dialog, DialogTrigger, DialogContent, DialogHeading, DialogDescription, DialogClose } from './dialog';
+import AuthDialog from './authDialog';
 
 const NavigationBar: React.FC = () => {
   return (
     <div className="z-10 top-0 left-0 w-full shadow-md flex justify-between p-2 bg-stone-700 text-white">
-    <Link href="/" className="flex items-center">
-      <h2>Whiteboard</h2>
-    </Link>
-    <div className="flex items-center">
-    <button
-          className="float-right w-9 h-9 border-2 border-white rounded-full text-white"
-        >
-          GU
-        </button>
+      <Link href="/" className="flex items-center">
+        <h2>Whiteboard</h2>
+      </Link>
+      <div className="flex items-center">
+        <Dialog>
+          <DialogTrigger>    <button
+            className="float-right w-9 h-9 border-2 border-white rounded-full text-white"
+          >
+            GU
+          </button></DialogTrigger>
+          <DialogContent className="Dialog">
+            <AuthDialog></AuthDialog>
+
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
-  </div>
 
   );
 };

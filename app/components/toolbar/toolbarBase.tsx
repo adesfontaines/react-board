@@ -1,19 +1,19 @@
-'use client'
 import React, { useEffect } from 'react';
 import { PiCursor, PiCursorFill, PiEraser, PiEraserFill, PiPencilSimpleLineDuotone, PiPencilSimpleLineFill, PiTextTLight, PiTextTBold,PiShapesLight, PiShapesBold } from "react-icons/pi";
 import { LuUndo, LuRedo } from "react-icons/lu";
 import { MdClose } from "react-icons/md"
-import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
-import { Tools } from '../enums/tools';
-import { useTranslation } from 'next-i18next';
-import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from './popOver';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
+import { Tools } from '../../enums/tools';
+import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from '../popOver';
+import { useTranslation } from '../../i18n';
 
 interface ToolbarProps {
   selectedTool: Tools;
   setSelectedTool: (tool: Tools) => void;
+  lng: string;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool }) => {
+const Toolbar: React.FC<ToolbarProps> = async ({ selectedTool, setSelectedTool, lng }) => {
   const defaultButtonClassname = "hover:bg-stone-200 rounded p-1 m-1";
   const selectedToolClassname = "bg-stone-200 rounded p-1 m-1 border-1 border-black";
 
@@ -21,7 +21,8 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool }) => {
   const horizontalBarClassname = commonBarClassname + " bottom-2";
   const verticalBarClassname = commonBarClassname + " flex-col justify-center fixed left-2 top-1/4"
 
-  const { t } = useTranslation('common');
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = await useTranslation(lng, 'common');
 
   return (
     <div className={verticalBarClassname}>
