@@ -2,5 +2,10 @@
     "toolbarSelectTooltip": "Sélectionner",
     "toolbarPencilTooltip": "Dessiner",
     "toolbarEraserTooltip": "Effacer",
-    "newDashboard": "Nouveau tableau"
+    "toolbarTextTooltip": "Ajouter du texte",
+    "toolbarFormTooltip": "Ajouter une forme",
+    "loginCaption": "Se connecter",
+    "newDashboard": "Nouveau tableau",
+    "undo": "Annuler",
+    "redo": "Rétablir"
 }

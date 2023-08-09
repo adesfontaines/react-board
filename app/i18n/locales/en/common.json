@@ -3,6 +3,9 @@
     "toolbarPencilTooltip": "Inking",
     "toolbarEraserTooltip": "Eraser",
     "toolbarTextTooltip": "Add text",
+    "toolbarFormTooltip": "Add form",
     "loginCaption": "Login",
-    "newDashboard": "New Dashboard"
+    "newDashboard": "New Dashboard",
+    "undo": "Undo",
+    "redo": "Redo"
 }

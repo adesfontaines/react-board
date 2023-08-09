@@ -1,6 +1,11 @@
 {
-    "toolbarSelectTooltip": "Comming soon",
-    "toolbarPencilTooltip": "Comming soon",
-    "toolbarEraserTooltip": "Comming soon",
-    "newDashboard": "Comming soon"
-}
+    "toolbarSelectTooltip": "選択",
+    "toolbarPencilTooltip": "インキング",
+    "toolbarEraserTooltip": "消しゴム",
+    "toolbarTextTooltip": "テキストを追加",
+    "toolbarFormTooltip": "フォームを追加",
+    "loginCaption": "ログイン",
+    "newDashboard": "新しいダッシュボード",
+    "undo": "元に戻す",
+    "redo": "やり直す"
+  }
