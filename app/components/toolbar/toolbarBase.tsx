@@ -38,6 +38,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
   const handleUndo = () => {
     setHistoryIndex(historyIndex-1);
     requestRedraw();
+    console.log(process.env.NEXT_PUBLiC_ADE);
   }
   
   const handleRedo = () => {

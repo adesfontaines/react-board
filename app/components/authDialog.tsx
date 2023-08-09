@@ -1,13 +1,11 @@
 /* eslint-disable react/no-children-prop */
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import React from 'react';
-import MicrosoftLogin from 'react-microsoft-login';
+import { signIn } from "next-auth/react"
 
-const AuthDialog: React.FC = () => {
-    const CLIENT_ID = "1f6f0d65-b614-45b6-8346-79ac0c61bbe2";
+const AuthDialog: React.FC<{lng: string}> = (lng) => {
+    const GOOGLE_CLIENT_ID = "149090648126-qcmn0dt120jo1lor25gomof6adbftm0i.apps.googleusercontent.com";
 
-    const authHandler = (err: any, data: any) => {
-        console.log(err, data);
-    };
     return (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 text-b lack">
             <div className="bg-white rounded-lg p-8 max-w-md w-full">
@@ -30,14 +28,27 @@ const AuthDialog: React.FC = () => {
                         <div className="border-t flex-1"></div>
                     </div>
 
-                    <MicrosoftLogin clientId={CLIENT_ID} redirectUri='http://localhost:3000/' authCallback={authHandler} children={undefined}></MicrosoftLogin>
 
+                    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                    <GoogleLogin
+                        locale={lng}
+                        size="large"
+                        onSuccess={credentialResponse => {
+                            console.log(credentialResponse);
+                            parseJwt(credentialResponse.credential);
+                        }}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                        />
+                    </GoogleOAuthProvider>
+                    
                     <button className="w-full bg-gray-600 text-white rounded-lg py-3">
                         Login with Microsoft
                         <i className="ms-Icon ms-Icon--AADLogo ms-Button-icon"></i>
                     </button>
  
-                    <button className="w-full bg-red-600 text-white rounded-lg py-3">
+                    <button onClick={() => signIn()} className="w-full bg-red-600 text-white rounded-lg py-3">
 
                         Login with Google
 
