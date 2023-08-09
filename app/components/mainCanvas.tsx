@@ -7,6 +7,7 @@ interface DrawingZoneProps {
     selectedTool: Tools;
     forms: Map<string, DrawingValue>;
     setForms: (drawings: Map<string, DrawingValue>) => void;
+    currentColor:string;
     zoom: number;
     setZoom: (zoom: number) => void;
     ref: React.ForwardedRef<unknown>;
@@ -14,7 +15,7 @@ interface DrawingZoneProps {
 
 // eslint-disable-next-line react/display-name
 const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneProps> = React.forwardRef(
-    ({ selectedTool, forms, setForms, zoom, setZoom }, ref) => {
+    ({ selectedTool, forms, setForms, zoom, setZoom, currentColor }, ref) => {
         const canvasRef = useRef<HTMLCanvasElement>(null);
         const [isDrawing, setIsDrawing] = useState(false);
         const [currentDraw, setCurrentDraw] = useState<DrawingValue | undefined>();
@@ -29,14 +30,6 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
         useEffect(() => {
             if (canvasRef) {
                 const canvas = canvasRef.current as unknown as HTMLCanvasElement;
-                const context = (canvas as HTMLCanvasElement).getContext('2d');
-
-                if (context) {
-                    // Set text style properties
-                    context.fillStyle = 'black';
-                    context.font = '32px Arial';
-                }
-
                 canvas.oncontextmenu = function () {
                     return false;
                 }
@@ -67,8 +60,6 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
             if (!context) return;
             context.beginPath();
             context.lineWidth = 1;
-            context.lineCap = 'round';
-
             context.moveTo(x0, y0);
             context.lineTo(x1, y1);
             context.stroke();
@@ -88,9 +79,9 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
 
             forms.forEach((value: DrawingValue, key: string) => {
                 context.fillStyle = value.color;
+                context.strokeStyle = value.color;
                 context.font = '32px Arial';
                 context.lineWidth = value.size;
-                context.strokeStyle = value.color;
 
                 if(value.text)
                 {
@@ -121,7 +112,7 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
             });
 
             if (selectedTool == Tools.Pencil) {
-                setCurrentDraw({ color: "black", size: 3, drawings: [] });
+                setCurrentDraw({ color: currentColor, size: 3, drawings: [] });
             }
             else if (selectedTool == Tools.Text) {
                 const scaledX = toTrueX(currentPosition.x);
@@ -131,7 +122,7 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
 
                 const uuid = crypto.randomUUID();
 
-                setForms(forms.set(uuid, { color: "black", size: 3, text: text, drawings: [{
+                setForms(forms.set(uuid, { color: currentColor, size: 3, text: text, drawings: [{
                     x0: scaledX, y0: scaledY
                 }] }));
 
@@ -146,6 +137,9 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
             if (!isDrawing || !canvasRef.current) return;
 
             const canvas = canvasRef.current as HTMLCanvasElement;
+            const context = (canvas as HTMLCanvasElement).getContext('2d');
+
+            if(!context) return;
 
             const currentPosition = {
                 x: event.clientX - canvas.offsetLeft,
@@ -159,6 +153,9 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
 
             switch (selectedTool) {
                 case Tools.Pencil:
+                    if(!currentDraw) return;
+                    context.strokeStyle = currentDraw.color;
+
                     // add the line to our drawing history
                     currentDraw?.drawings.push({ x0: prevScaledX, y0: prevScaledY, x1: scaledX, y1: scaledY }
                     );
@@ -209,7 +206,6 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
                 setForms(forms.set(uuid, currentDraw));
                 setCurrentDraw(undefined);
             }
-            console.log(forms);
         };
         const handleMouseWheel = (event: { deltaY: any; pageX: number; pageY: number; clientX: number; clientY: number }) => {
             const canvas = canvasRef.current as unknown as HTMLCanvasElement;
@@ -238,6 +234,7 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
             const unitsAddLeft = unitsZoomedX * distX;
             const unitsAddTop = unitsZoomedY * distY;
 
+            
             setOffset({
                 x: offset.x - unitsAddLeft,
                 y: offset.y - unitsAddTop

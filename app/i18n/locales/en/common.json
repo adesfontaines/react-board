@@ -7,5 +7,6 @@
     "loginCaption": "Login",
     "newDashboard": "New Dashboard",
     "undo": "Undo",
-    "redo": "Redo"
+    "redo": "Redo",
+    "close": "Close"
 }

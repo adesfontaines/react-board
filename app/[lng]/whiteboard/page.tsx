@@ -11,6 +11,7 @@ export default function Whiteboard({ params: { lng} }) {
   const [selectedTool, setSelectedTool] = React.useState(Tools.Pencil);
   const [forms, setForms] = React.useState<Map<string, any>>(new Map());
   const [zoom, setZoom] = React.useState(1.0);
+  const [currentColor, setCurrentColor] = React.useState("#000000");
 
   const drawingZoneRef = useRef<any>(null);
 
@@ -29,8 +30,8 @@ export default function Whiteboard({ params: { lng} }) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
       <NavigationBar lng={lng}></NavigationBar>
-      <MainCanvas ref={drawingZoneRef} zoom={zoom} setZoom={setZoom} forms={forms} setForms={setForms} selectedTool={selectedTool}></MainCanvas>
-      <ToolbarBase selectedTool={selectedTool} setSelectedTool={setSelectedTool} t={t} lng={lng} ></ToolbarBase>
+      <MainCanvas currentColor={currentColor} ref={drawingZoneRef} zoom={zoom} setZoom={setZoom} forms={forms} setForms={setForms} selectedTool={selectedTool}></MainCanvas>
+      <ToolbarBase currentColor={currentColor} setCurrentColor={setCurrentColor} selectedTool={selectedTool} setSelectedTool={setSelectedTool} t={t} lng={lng} ></ToolbarBase>
       <ZoomBar zoom={zoom} setZoom={setZoom} requestRedraw={requestRedraw}></ZoomBar>
     </main>
   )
