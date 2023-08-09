@@ -5,15 +5,15 @@ import { MdClose } from "react-icons/md"
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
 import { Tools } from '../../enums/tools';
 import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from '../popOver';
-import { useTranslation } from '../../i18n';
 
-interface ToolbarProps {
+export interface ToolbarProps {
   selectedTool: Tools;
   setSelectedTool: (tool: Tools) => void;
+  t?: any;
   lng: string;
 }
 
-const Toolbar: React.FC<ToolbarProps> = async ({ selectedTool, setSelectedTool, lng }) => {
+const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng }) => {
   const defaultButtonClassname = "hover:bg-stone-200 rounded p-1 m-1";
   const selectedToolClassname = "bg-stone-200 rounded p-1 m-1 border-1 border-black";
 
@@ -21,19 +21,14 @@ const Toolbar: React.FC<ToolbarProps> = async ({ selectedTool, setSelectedTool, 
   const horizontalBarClassname = commonBarClassname + " bottom-2";
   const verticalBarClassname = commonBarClassname + " flex-col justify-center fixed left-2 top-1/4"
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { t } = await useTranslation(lng, 'common');
-
   return (
     <div className={verticalBarClassname}>
       <div className="bg-white rounded-md flex flex-col mb-2 shadow-md">
         <Tooltip>
-          <TooltipTrigger>
-            <button onClick={() => setSelectedTool(Tools.Select)} className={selectedTool == Tools.Select ? selectedToolClassname : defaultButtonClassname}>
+          <TooltipTrigger onClick={() => setSelectedTool(Tools.Select)} className={selectedTool == Tools.Select ? selectedToolClassname : defaultButtonClassname}>
               {selectedTool == Tools.Select ?
                 <PiCursorFill size={32}></PiCursorFill> :
                 <PiCursor size={32}></PiCursor>}
-            </button>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">{t('toolbarSelectTooltip')}</TooltipContent>
         </Tooltip>
@@ -41,12 +36,10 @@ const Toolbar: React.FC<ToolbarProps> = async ({ selectedTool, setSelectedTool, 
         <Tooltip>
           <TooltipTrigger>
             <Popover placement='right'>
-              <PopoverTrigger>
-                <button onClick={() => setSelectedTool(Tools.Pencil)} className={selectedTool == Tools.Pencil || selectedTool == Tools.Eraser ? selectedToolClassname : defaultButtonClassname}>
+              <PopoverTrigger onClick={() => setSelectedTool(Tools.Pencil)} className={selectedTool == Tools.Pencil || selectedTool == Tools.Eraser ? selectedToolClassname : defaultButtonClassname}>
                   {selectedTool == Tools.Pencil || selectedTool == Tools.Eraser ?
                     <PiPencilSimpleLineFill size={32}></PiPencilSimpleLineFill> :
                     <PiPencilSimpleLineDuotone size={32}></PiPencilSimpleLineDuotone>}
-                </button>
               </PopoverTrigger>
               <PopoverContent className="Popover bg-white rounded-md flex flex-col shadow-md text-black">
               <button onClick={() => setSelectedTool(Tools.Pencil)} className={selectedTool == Tools.Pencil ? selectedToolClassname : defaultButtonClassname}>
@@ -55,12 +48,10 @@ const Toolbar: React.FC<ToolbarProps> = async ({ selectedTool, setSelectedTool, 
                     <PiPencilSimpleLineDuotone size={32}></PiPencilSimpleLineDuotone>}
                 </button>
                 <Tooltip>
-                  <TooltipTrigger>
-                    <button onClick={() => setSelectedTool(Tools.Eraser)} className={selectedTool == Tools.Eraser ? selectedToolClassname : defaultButtonClassname}>
+                  <TooltipTrigger onClick={() => setSelectedTool(Tools.Eraser)} className={selectedTool == Tools.Eraser ? selectedToolClassname : defaultButtonClassname}>
                       {selectedTool == Tools.Eraser ?
                         <PiEraserFill size={32}></PiEraserFill> :
                         <PiEraser size={32}></PiEraser>}
-                    </button>
                   </TooltipTrigger>
                   <TooltipContent className="Tooltip">{t("toolbarEraserTooltip")}</TooltipContent>
                 </Tooltip>
@@ -77,43 +68,35 @@ const Toolbar: React.FC<ToolbarProps> = async ({ selectedTool, setSelectedTool, 
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
-            <button onClick={() => setSelectedTool(Tools.Text)} className={selectedTool == Tools.Text ? selectedToolClassname : defaultButtonClassname}>
+          <TooltipTrigger onClick={() => setSelectedTool(Tools.Text)} className={selectedTool == Tools.Text ? selectedToolClassname : defaultButtonClassname}>
               {selectedTool == Tools.Text ?
                 <PiTextTBold size={32}></PiTextTBold> :
                 <PiTextTLight size={32}></PiTextTLight>}
-            </button>
           </TooltipTrigger>
-          <TooltipContent className="Tooltip">Add text</TooltipContent>
+          <TooltipContent className="Tooltip">{t('toolbarTextTooltip')}</TooltipContent>
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
-            <button onClick={() => setSelectedTool(Tools.Form)} className={selectedTool == Tools.Form ? selectedToolClassname : defaultButtonClassname}>
+          <TooltipTrigger onClick={() => setSelectedTool(Tools.Form)} className={selectedTool == Tools.Form ? selectedToolClassname : defaultButtonClassname}>
             {selectedTool == Tools.Form ?
                 <PiShapesBold size={32}></PiShapesBold> :
                 <PiShapesLight size={32}></PiShapesLight>}
-            </button>
           </TooltipTrigger>
-          <TooltipContent className="Tooltip">Add form</TooltipContent>
+          <TooltipContent className="Tooltip">{t('toolbarFormTooltip')}</TooltipContent>
         </Tooltip>
       </div>
       <div className="bg-white rounded-md flex flex-col shadow-md">
         <Tooltip>
-          <TooltipTrigger>
-            <button className={defaultButtonClassname}>
+          <TooltipTrigger className={defaultButtonClassname}>
               <LuUndo size={32}></LuUndo>
-            </button>
           </TooltipTrigger>
-          <TooltipContent className="Tooltip">Undo</TooltipContent>
+          <TooltipContent className="Tooltip">{t('undo')}</TooltipContent>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger>
-            <button disabled={true} className={defaultButtonClassname + ' disabled'}>
+          <TooltipTrigger disabled={true} className={defaultButtonClassname + ' disabled'}>
               <LuRedo size={32}></LuRedo>
-            </button>
           </TooltipTrigger>
-          <TooltipContent className="Tooltip">Redo</TooltipContent>
+          <TooltipContent className="Tooltip">{t('redo')}</TooltipContent>
         </Tooltip>
       </div>
     </div>

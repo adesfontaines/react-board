@@ -16,7 +16,6 @@ import {
   FloatingPortal,
 } from "@floating-ui/react";
 import type { Placement } from "@floating-ui/react";
-import dynamic from 'next/dynamic';
 
 interface TooltipOptions {
   initialOpen?: boolean;
