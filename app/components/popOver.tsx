@@ -20,6 +20,7 @@ import {
 interface PopoverOptions {
   initialOpen?: boolean;
   placement?: Placement;
+  dismissOutside?: boolean;
   modal?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -28,6 +29,7 @@ interface PopoverOptions {
 export function usePopover({
   initialOpen = false,
   placement = "bottom",
+  dismissOutside = false,
   modal,
   open: controlledOpen,
   onOpenChange: setControlledOpen
@@ -62,7 +64,7 @@ export function usePopover({
   const click = useClick(context, {
     enabled: controlledOpen == null
   });
-  const dismiss = useDismiss(context, {outsidePress: false});
+  const dismiss = useDismiss(context, {outsidePress: dismissOutside});
   const role = useRole(context);
 
   const interactions = useInteractions([click, dismiss, role]);

@@ -13,11 +13,15 @@ export interface ToolbarProps {
   setCurrentColor: (color: string) => void;
   drawSize: number;
   setDrawSize: (size: number) => void;
+  historyIndex: number;
+  setHistoryIndex: (index: number) => void;
+  maxHistory: number;
   t?: any;
   lng: string;
+  requestRedraw: () => void;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng, currentColor, setCurrentColor, drawSize, setDrawSize }) => {
+const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng, currentColor, setCurrentColor, drawSize, setDrawSize, requestRedraw, historyIndex, setHistoryIndex, maxHistory}) => {
   const commonColors: string[] = [
     '#263238', '#2E3C43', '#314549', '#546E7A',
     '#B2CCD6', '#EEFFFF', '#EEFFFF', '#FFFFFF',
@@ -25,12 +29,21 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
     '#89DDFF', '#82AAFF', '#C792EA', '#FF5370'
   ];
 
-  const defaultButtonClassname = "hover:bg-stone-200 rounded p-1 m-1";
-  const selectedToolClassname = "bg-stone-200 rounded p-1 m-1 border-1 border-black";
+  const defaultButtonClassname = "hover:bg-stone-200 rounded p-1 m-1 disabled:opacity-50";
+  const selectedToolClassname = "bg-stone-200 rounded p-1 m-1 border-black";
 
-  const commonBarClassname = "text-black flex fixed";
-  const horizontalBarClassname = commonBarClassname + " bottom-2";
-  const verticalBarClassname = commonBarClassname + " flex-col justify-center fixed left-2 top-1/4"
+  const horizontalBarClassname = "text-black flex fixed bottom-2";
+  const verticalBarClassname =  "text-black flex fixed flex-col justify-center fixed left-2 top-1/4"
+
+  const handleUndo = () => {
+    setHistoryIndex(historyIndex-1);
+    requestRedraw();
+  }
+  
+  const handleRedo = () => {
+    setHistoryIndex(historyIndex+1);
+    requestRedraw();
+  }
 
   return (
     <div className={verticalBarClassname}>
@@ -53,6 +66,15 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
                   <PiPencilSimpleLineDuotone size={32}></PiPencilSimpleLineDuotone>}
               </PopoverTrigger>
               <PopoverContent className="Popover ml-2 bg-white rounded-md flex flex-col shadow-md text-black">
+              <PopoverClose>
+                  <Tooltip>
+                    <TooltipTrigger className={defaultButtonClassname}>
+                      <MdClose size={32}></MdClose>
+                    </TooltipTrigger>
+                    <TooltipContent className="Tooltip">{t("close")}</TooltipContent>
+                  </Tooltip>
+                </PopoverClose>
+
                 <Tooltip>
                   <TooltipTrigger onClick={() => setSelectedTool(Tools.Pencil)} className={selectedTool == Tools.Pencil ? selectedToolClassname : defaultButtonClassname}>
                     {selectedTool == Tools.Pencil ?
@@ -73,7 +95,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
 
                 <Tooltip>
                   <TooltipTrigger>
-                    <Popover placement='right'>
+                    <Popover dismissOutside={true} placement='right'>
                       <PopoverTrigger className={defaultButtonClassname}>
                         <div className="color-btn" style={{background: currentColor}}/> 
                       </PopoverTrigger>
@@ -92,17 +114,8 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
                       </PopoverContent>
                     </Popover>
                   </TooltipTrigger>
-                  <TooltipContent className="Tooltip">{t("close")}</TooltipContent>
+                  <TooltipContent className="Tooltip">{t("pickColor")}</TooltipContent>
                 </Tooltip>
-                
-                <PopoverClose>
-                  <Tooltip>
-                    <TooltipTrigger className={defaultButtonClassname}>
-                      <MdClose size={32}></MdClose>
-                    </TooltipTrigger>
-                    <TooltipContent className="Tooltip">{t("close")}</TooltipContent>
-                  </Tooltip>
-                </PopoverClose>
 
               </PopoverContent>
             </Popover>
@@ -120,7 +133,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger onClick={() => setSelectedTool(Tools.Form)} className={selectedTool == Tools.Form ? selectedToolClassname : defaultButtonClassname}>
+          <TooltipTrigger disabled={true} onClick={() => setSelectedTool(Tools.Form)} className={selectedTool == Tools.Form ? selectedToolClassname : defaultButtonClassname}>
             {selectedTool == Tools.Form ?
               <PiShapesBold size={32}></PiShapesBold> :
               <PiShapesLight size={32}></PiShapesLight>}
@@ -130,13 +143,13 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
       </div>
       <div className="bg-white rounded-md flex flex-col shadow-md">
         <Tooltip>
-          <TooltipTrigger className={defaultButtonClassname}>
+          <TooltipTrigger disabled={historyIndex <= 0} onClick={() => handleUndo()}  className={defaultButtonClassname}>
             <LuUndo size={32}></LuUndo>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">{t('undo')}</TooltipContent>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger disabled={true} className={defaultButtonClassname + ' disabled'}>
+          <TooltipTrigger disabled={historyIndex >= maxHistory} onClick={() => handleRedo()} className={defaultButtonClassname}>
             <LuRedo size={32}></LuRedo>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">{t('redo')}</TooltipContent>

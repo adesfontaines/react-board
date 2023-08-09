@@ -7,5 +7,7 @@
     "loginCaption": "ログイン",
     "newDashboard": "新しいダッシュボード",
     "undo": "元に戻す",
-    "redo": "やり直す"
+    "redo": "やり直す",
+    "close": "閉じる",
+    "pickColor": "色を選ぶ"
   }

@@ -8,5 +8,6 @@
     "newDashboard": "New Dashboard",
     "undo": "Undo",
     "redo": "Redo",
-    "close": "Close"
+    "close": "Close",
+    "pickColor": "Pick color"
 }

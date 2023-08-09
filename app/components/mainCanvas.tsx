@@ -7,6 +7,8 @@ interface DrawingZoneProps {
     selectedTool: Tools;
     forms: Map<string, DrawingValue>;
     setForms: (drawings: Map<string, DrawingValue>) => void;
+    historyIndex: number;
+    setHistoryIndex: (index: number) => void;
     currentColor:string;
     zoom: number;
     drawSize: number;
@@ -14,9 +16,10 @@ interface DrawingZoneProps {
     ref: React.ForwardedRef<unknown>;
 }
 
+
 // eslint-disable-next-line react/display-name
 const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneProps> = React.forwardRef(
-    ({ selectedTool, forms, setForms, zoom, setZoom, currentColor, drawSize }, ref) => {
+    ({ selectedTool, forms, setForms, zoom, setZoom, currentColor, drawSize, historyIndex, setHistoryIndex }, ref) => {
         const canvasRef = useRef<HTMLCanvasElement>(null);
         const [isDrawing, setIsDrawing] = useState(false);
         const [currentDraw, setCurrentDraw] = useState<DrawingValue | undefined>();
@@ -36,7 +39,6 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
                 }
 
                 updateCanvas();
-
                 window.addEventListener('resize', updateCanvas);
 
                 return () => {
@@ -76,7 +78,9 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
             context.scale(zoom, zoom);
             context.translate(offset.x, offset.y);
 
+            let i = 0;
             forms.forEach((value: DrawingValue, key: string) => {
+                if(i == historyIndex) return;
                 context.fillStyle = value.color;
                 context.strokeStyle = value.color;
                 context.font = '32px Arial';
@@ -92,6 +96,7 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
                         drawLine(draw.x0, draw.y0, draw.x1, draw.y1);
                     };
                 }
+                i++;
             });
 
 
@@ -123,9 +128,19 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
 
                 const uuid = crypto.randomUUID();
 
-                setForms(forms.set(uuid, { color: currentColor, size: 3, text: text, drawings: [{
-                    x0: scaledX, y0: scaledY
-                }] }));
+                const textEntry: DrawingValue = { color: currentColor, size: 3, text: text, 
+                    drawings: [{ x0: scaledX, y0: scaledY }]};
+                if(historyIndex != forms.size)
+                {
+                    const arrayTmp = Array.from(forms).slice(0, historyIndex);
+                    arrayTmp.push([uuid, textEntry]);
+                    setForms(new Map(arrayTmp));
+                } 
+                else{
+                    setForms(forms.set(uuid, textEntry));
+                }
+                
+                setHistoryIndex(historyIndex+1);
 
                 context.fillStyle = currentColor;
 
@@ -176,6 +191,8 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
                     // Remove lines within a certain range from the current position
                     const radius = 6; // Adjust this value as needed
                     
+                    setForms(new Map());
+                    setHistoryIndex(0);
                     // const linesToRemove = [];
                     
                     // drawings.forEach((value: DrawingValue, key: string) => {
@@ -192,7 +209,7 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
                     //     return distance <= radius;
                     // });
                     // setForms(drawings.filter((line) => !linesToRemove.includes(line)));
-                    // updateCanvas();
+                    updateCanvas();
                     break;
             };
             setPrevPosition(currentPosition);
@@ -205,7 +222,18 @@ const MainCanvas: React.ForwardRefRenderFunction<HTMLCanvasElement, DrawingZoneP
             if(currentDraw)
             {
                 const uuid = crypto.randomUUID();
-                setForms(forms.set(uuid, currentDraw));
+
+                if(historyIndex != forms.size)
+                {
+                    const arrayTmp = Array.from(forms).slice(0, historyIndex);
+                    arrayTmp.push([uuid, currentDraw]);
+                    setForms(new Map(arrayTmp));
+                } 
+                else{
+                    setForms(forms.set(uuid, currentDraw));
+                }
+
+                setHistoryIndex(historyIndex+1);
                 setCurrentDraw(undefined);
             }
         };

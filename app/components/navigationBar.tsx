@@ -16,7 +16,7 @@ const NavigationBar: React.FC<{lng: string}> = ({lng}) => {
             GU
           </DialogTrigger>
           <DialogContent className="Dialog">
-            <AuthDialog></AuthDialog>
+            <AuthDialog lng={lng}></AuthDialog>
 
           </DialogContent>
         </Dialog>

@@ -8,5 +8,6 @@
     "newDashboard": "Nouveau tableau",
     "undo": "Annuler",
     "redo": "Rétablir",
-    "close": "Fermer"
+    "close": "Fermer",
+    "pickColor": "Changer de couleur"
 }
