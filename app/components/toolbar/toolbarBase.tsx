@@ -85,7 +85,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
                   <TooltipTrigger>
                     <Popover placement='right'>
                       <PopoverTrigger className={defaultButtonClassname}>
-                        <MdClose size={32}></MdClose>
+                        <MdClose size={32}></MdClose> 
                       </PopoverTrigger>
                       <PopoverContent className="Popover ml-2 p-2 bg-white rounded-md flex flex-col shadow-md text-black">
                           <div className="mb-2 flex items-center">
@@ -95,7 +95,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
                           <div className="my-4 flex flex-1 items-center space-x-2 border-t" />
                           <div className="grid grid-cols-4 gap-2">
                             {commonColors.map((color, index) => (
-                            <button onClick={() => setCurrentColor(color)} key={index} style={{ backgroundColor: color }} className="color-btn bg-white-500" />
+                            <button onClick={() => setCurrentColor(color)} key={index} style={{ backgroundColor: color }} className={currentColor == color ? "border-2 border-black rounded-full": "color-btn"} />
                             ))}
                           </div>
 
