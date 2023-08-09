@@ -35,6 +35,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
 
         <Tooltip>
           <TooltipTrigger>
+            <div>
             <Popover placement='right'>
               <PopoverTrigger onClick={() => setSelectedTool(Tools.Pencil)} className={selectedTool == Tools.Pencil || selectedTool == Tools.Eraser ? selectedToolClassname : defaultButtonClassname}>
                   {selectedTool == Tools.Pencil || selectedTool == Tools.Eraser ?
@@ -63,6 +64,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
                 </PopoverClose>
               </PopoverContent>
             </Popover>
+            </div>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">{t('toolbarPencilTooltip')}</TooltipContent>
         </Tooltip>

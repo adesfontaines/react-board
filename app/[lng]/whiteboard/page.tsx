@@ -1,16 +1,15 @@
 'use client'
 import NavigationBar from '../../components/navigationBar'
-import DrawingZone from '../../components/drawingZone'
+import MainCanvas from '../../components/mainCanvas'
 import React, { useRef } from 'react'
 import { Tools } from '../../enums/tools'
 import ZoomBar from '../../components/zoomBar'
-import { Toolbar } from '@/app/components/toolbar/client'
 import ToolbarBase from '@/app/components/toolbar/toolbarBase'
 import { useTranslation } from '@/app/i18n/client'
 
 export default function Whiteboard({ params: { lng} }) {
   const [selectedTool, setSelectedTool] = React.useState(Tools.Pencil);
-  const [drawings, setDrawings] = React.useState<any[]>([]);
+  const [forms, setForms] = React.useState<Map<string, any>>(new Map());
   const [zoom, setZoom] = React.useState(1.0);
 
   const drawingZoneRef = useRef<any>(null);
@@ -30,7 +29,7 @@ export default function Whiteboard({ params: { lng} }) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
       <NavigationBar lng={lng}></NavigationBar>
-      <DrawingZone ref={drawingZoneRef} zoom={zoom} setZoom={setZoom} drawings={drawings} setDrawings={setDrawings} selectedTool={selectedTool}></DrawingZone>
+      <MainCanvas ref={drawingZoneRef} zoom={zoom} setZoom={setZoom} forms={forms} setForms={setForms} selectedTool={selectedTool}></MainCanvas>
       <ToolbarBase selectedTool={selectedTool} setSelectedTool={setSelectedTool} t={t} lng={lng} ></ToolbarBase>
       <ZoomBar zoom={zoom} setZoom={setZoom} requestRedraw={requestRedraw}></ZoomBar>
     </main>

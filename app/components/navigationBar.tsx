@@ -1,4 +1,3 @@
-'use client'
 import Link from 'next/link';
 import React from 'react';
 import { Dialog, DialogTrigger, DialogContent, DialogHeading, DialogDescription, DialogClose } from './dialog';
