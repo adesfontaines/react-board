@@ -11,28 +11,18 @@ export interface ToolbarProps {
   setSelectedTool: (tool: Tools) => void;
   currentColor: string;
   setCurrentColor: (color: string) => void;
+  drawSize: number;
+  setDrawSize: (size: number) => void;
   t?: any;
   lng: string;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng, currentColor, setCurrentColor }) => {
+const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng, currentColor, setCurrentColor, drawSize, setDrawSize }) => {
   const commonColors: string[] = [
-    '#000000', // Black
-    '#FFFFFF', // White
-    '#FF0000', // Red
-    '#00FF00', // Green
-    '#0000FF', // Blue
-    '#FFFF00', // Yellow
-    '#FF00FF', // Magenta
-    '#00FFFF', // Cyan
-    '#FFA500', // Orange
-    '#800080', // Purple
-    '#008000', // Dark Green
-    '#800000', // Maroon
-    '#008080', // Teal
-    '#808080', // Gray
-    '#FFC0CB', // Pink
-    '#A52A2A', // Brown
+    '#263238', '#2E3C43', '#314549', '#546E7A',
+    '#B2CCD6', '#EEFFFF', '#EEFFFF', '#FFFFFF',
+    '#F07178', '#F78C6C', '#FFCB6B', '#C3E88D',
+    '#89DDFF', '#82AAFF', '#C792EA', '#FF5370'
   ];
 
   const defaultButtonClassname = "hover:bg-stone-200 rounded p-1 m-1";
@@ -85,12 +75,12 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedTool, setSelectedTool, t, lng
                   <TooltipTrigger>
                     <Popover placement='right'>
                       <PopoverTrigger className={defaultButtonClassname}>
-                        <MdClose size={32}></MdClose> 
+                        <div className="color-btn" style={{background: currentColor}}/> 
                       </PopoverTrigger>
                       <PopoverContent className="Popover ml-2 p-2 bg-white rounded-md flex flex-col shadow-md text-black">
                           <div className="mb-2 flex items-center">
-                            <input type="range" className="slider h-1 w-full" min="" max={8} step={1} />
-                            <span className="ml-2">8</span>
+                            <input type="range" value={drawSize} onChange={(event) => setDrawSize(event?.target.valueAsNumber)} className="slider h-1 w-full" min="1" max={8} step={1} />
+                            <span className="ml-2">{drawSize}</span>
                           </div>
                           <div className="my-4 flex flex-1 items-center space-x-2 border-t" />
                           <div className="grid grid-cols-4 gap-2">
