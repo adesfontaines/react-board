@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import * as React from "react";
 import {
   useFloating,
@@ -28,7 +28,7 @@ export function useTooltip({
   initialOpen = false,
   placement = "right",
   open: controlledOpen,
-  onOpenChange: setControlledOpen
+  onOpenChange: setControlledOpen,
 }: TooltipOptions = {}) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(initialOpen);
 
@@ -41,24 +41,24 @@ export function useTooltip({
     onOpenChange: setOpen,
     whileElementsMounted: autoUpdate,
     middleware: [
-      offset(5),
+      offset(8),
       flip({
         crossAxis: placement.includes("-"),
         fallbackAxisSideDirection: "start",
-        padding: 5
+        padding: 8,
       }),
-      shift({ padding: 5 })
-    ]
+      shift({ padding: 8 }),
+    ],
   });
 
   const context = data.context;
 
   const hover = useHover(context, {
     move: false,
-    enabled: controlledOpen == null
+    enabled: controlledOpen == null,
   });
   const focus = useFocus(context, {
-    enabled: controlledOpen == null
+    enabled: controlledOpen == null,
   });
   const dismiss = useDismiss(context);
   const role = useRole(context, { role: "tooltip" });
@@ -70,7 +70,7 @@ export function useTooltip({
       open,
       setOpen,
       ...interactions,
-      ...data
+      ...data,
     }),
     [open, setOpen, interactions, data]
   );
@@ -126,11 +126,11 @@ export const TooltipTrigger = React.forwardRef<
         ref,
         ...props,
         ...children.props,
-        "data-state": context.open ? "open" : "closed"
+        "data-state": context.open ? "open" : "closed",
       })
     );
   }
-  return isMounted ?
+  return isMounted ? (
     <button
       ref={ref}
       // The user can style the trigger based on the state
@@ -139,7 +139,9 @@ export const TooltipTrigger = React.forwardRef<
     >
       {children}
     </button>
-  : ''
+  ) : (
+    ""
+  );
 });
 
 export const TooltipContent = React.forwardRef<
@@ -157,7 +159,7 @@ export const TooltipContent = React.forwardRef<
         ref={ref}
         style={{
           ...context.floatingStyles,
-          ...style
+          ...style,
         }}
         {...context.getFloatingProps(props)}
       />

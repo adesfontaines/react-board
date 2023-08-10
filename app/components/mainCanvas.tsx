@@ -1,6 +1,13 @@
 /* eslint-disable react/display-name */
 "use client";
-import React, { Ref, RefObject, useEffect, useRef, useState } from "react";
+import React, {
+  Ref,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+  useImperativeHandle,
+} from "react";
 import { Tools } from "../enums/tools";
 
 interface DrawingValue {
@@ -19,7 +26,7 @@ interface DrawingZoneProps {
   zoom: number;
   drawSize: number;
   setZoom: (zoom: number) => void;
-  ref: React.ForwardedRef<unknown>;
+  ref: any;
 }
 
 // eslint-disable-next-line react/display-name
@@ -46,6 +53,15 @@ const MainCanvas: React.ForwardRefRenderFunction<
 
   const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  useImperativeHandle(ref, () => ({
+    updateCanvas: () => {
+      updateCanvas();
+    },
+    exportCanvas: () => {
+      exportCanvas();
+    },
+  }));
 
   useEffect(() => {
     if (canvasRef) {
@@ -80,6 +96,15 @@ const MainCanvas: React.ForwardRefRenderFunction<
     context.lineTo(x1, y1);
     context.stroke();
   };
+
+  const exportCanvas = () => {
+    const canvas = canvasRef.current as unknown as HTMLCanvasElement;
+
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png");
+    link.download = "canva_export.png";
+    link.click();
+  };
   const updateCanvas = () => {
     const canvas = canvasRef.current as unknown as HTMLCanvasElement;
     const context = (canvas as HTMLCanvasElement).getContext("2d");
@@ -91,6 +116,8 @@ const MainCanvas: React.ForwardRefRenderFunction<
     canvas.height = document.body.clientHeight;
 
     context.lineCap = "round";
+    context.font = "32px Arial";
+
     context.scale(zoom, zoom);
     context.translate(offset.x, offset.y);
 
@@ -99,7 +126,6 @@ const MainCanvas: React.ForwardRefRenderFunction<
       if (i == historyIndex) return;
       context.fillStyle = value.color;
       context.strokeStyle = value.color;
-      context.font = "32px Arial";
       context.lineWidth = value.size;
 
       if (value.text) {

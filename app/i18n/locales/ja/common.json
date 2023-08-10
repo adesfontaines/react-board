@@ -8,6 +8,11 @@
     "newDashboard": "新しいダッシュボード",
     "undo": "元に戻す",
     "redo": "やり直す",
-    "close": "閉じる",
-    "pickColor": "色を選ぶ"
+    "pickColor": "色を選ぶ",
+    "signIn": "サインイン",
+    "signOut": "サインアウト",
+    "settings": "設定",
+    "zoomIn": "ズームイン",
+    "zoomOut": "ズームアウト",
+    "resetZoom": "ズームリセット"
   }

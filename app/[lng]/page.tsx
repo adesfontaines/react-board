@@ -1,14 +1,22 @@
-import NavigationBar from '../components/navigationBar'
-import WhiteboardList from '../components/whiteboardList'
-import { NextAuthProvider } from '../providers/nextAuthProvider';
+"use client";
+import NavigationBar from "../components/navigationBar";
+import WhiteboardList from "../components/whiteboardList";
+import { useTranslation } from "../i18n/client";
+import { NextAuthProvider } from "../providers/nextAuthProvider";
 
-export default async function Home() {
+export default function Home({
+  params: { lng },
+}: {
+  params: any;
+}): React.JSX.Element {
+  const { t } = useTranslation(lng, "common");
+
   return (
     <NextAuthProvider>
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      <NavigationBar lng={'en'}></NavigationBar>
-      <WhiteboardList></WhiteboardList>
-    </main>
+      <main className="flex min-h-screen flex-col items-center justify-between">
+        <NavigationBar t={t} lng={lng}></NavigationBar>
+        <WhiteboardList t={t} lng={lng}></WhiteboardList>
+      </main>
     </NextAuthProvider>
-  )
+  );
 }

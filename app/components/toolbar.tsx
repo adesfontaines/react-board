@@ -2,17 +2,19 @@ import React, { useEffect } from "react";
 import {
   PiCursor,
   PiCursorFill,
-  PiEraser,
-  PiEraserFill,
   PiPencilSimpleLineDuotone,
   PiPencilSimpleLineFill,
-  PiTextTLight,
-  PiTextTBold,
   PiShapesLight,
   PiShapesBold,
 } from "react-icons/pi";
-import { LuUndo, LuRedo } from "react-icons/lu";
-import { MdClose } from "react-icons/md";
+import {
+  LuUndo,
+  LuRedo,
+  LuHighlighter,
+  LuEraser,
+  LuType,
+  LuX,
+} from "react-icons/lu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 import { Tools } from "../enums/tools";
 import {
@@ -81,7 +83,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
   const handleUndo = () => {
     setHistoryIndex(historyIndex - 1);
     requestRedraw();
-    console.log(process.env.NEXT_PUBLiC_ADE);
   };
 
   const handleRedo = () => {
@@ -102,9 +103,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
             }
           >
             {selectedTool == Tools.Select ? (
-              <PiCursorFill size={32}></PiCursorFill>
+              <PiCursorFill size={28}></PiCursorFill>
             ) : (
-              <PiCursor size={32}></PiCursor>
+              <PiCursor size={28}></PiCursor>
             )}
           </TooltipTrigger>
           <TooltipContent className="Tooltip">
@@ -125,18 +126,18 @@ const Toolbar: React.FC<ToolbarProps> = ({
               >
                 {selectedTool == Tools.Pencil ||
                 selectedTool == Tools.Eraser ? (
-                  <PiPencilSimpleLineFill size={32}></PiPencilSimpleLineFill>
+                  <PiPencilSimpleLineFill size={28}></PiPencilSimpleLineFill>
                 ) : (
                   <PiPencilSimpleLineDuotone
-                    size={32}
+                    size={28}
                   ></PiPencilSimpleLineDuotone>
                 )}
               </PopoverTrigger>
               <PopoverContent className="Popover ml-2 bg-white rounded-md flex flex-col shadow-md text-black">
                 <PopoverClose>
                   <Tooltip>
-                    <TooltipTrigger className={defaultButtonClassname}>
-                      <MdClose size={32}></MdClose>
+                    <TooltipTrigger className="rounded p-1 m-1 hover:color-blue">
+                      <LuX size={28} />
                     </TooltipTrigger>
                     <TooltipContent className="Tooltip">
                       {t("close")}
@@ -154,17 +155,29 @@ const Toolbar: React.FC<ToolbarProps> = ({
                     }
                   >
                     {selectedTool == Tools.Pencil ? (
-                      <PiPencilSimpleLineFill
-                        size={32}
-                      ></PiPencilSimpleLineFill>
+                      <PiPencilSimpleLineFill size={28} />
                     ) : (
-                      <PiPencilSimpleLineDuotone
-                        size={32}
-                      ></PiPencilSimpleLineDuotone>
+                      <PiPencilSimpleLineDuotone size={28} />
                     )}
                   </TooltipTrigger>
                   <TooltipContent className="Tooltip">
                     {t("toolbarPencilTooltip")}
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger
+                    onClick={() => setSelectedTool(Tools.Highlighter)}
+                    className={
+                      selectedTool == Tools.Highlighter
+                        ? selectedToolClassname
+                        : defaultButtonClassname
+                    }
+                  >
+                    <LuHighlighter size={28} />
+                  </TooltipTrigger>
+                  <TooltipContent className="Tooltip">
+                    {t("toolbarHighlighterTooltip")}
                   </TooltipContent>
                 </Tooltip>
 
@@ -177,11 +190,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                         : defaultButtonClassname
                     }
                   >
-                    {selectedTool == Tools.Eraser ? (
-                      <PiEraserFill size={32}></PiEraserFill>
-                    ) : (
-                      <PiEraser size={32}></PiEraser>
-                    )}
+                    <LuEraser size={28} />
                   </TooltipTrigger>
                   <TooltipContent className="Tooltip">
                     {t("toolbarEraserTooltip")}
@@ -251,11 +260,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 : defaultButtonClassname
             }
           >
-            {selectedTool == Tools.Text ? (
-              <PiTextTBold size={32}></PiTextTBold>
-            ) : (
-              <PiTextTLight size={32}></PiTextTLight>
-            )}
+            <LuType size={28} />
           </TooltipTrigger>
           <TooltipContent className="Tooltip">
             {t("toolbarTextTooltip")}
@@ -273,9 +278,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
             }
           >
             {selectedTool == Tools.Form ? (
-              <PiShapesBold size={32}></PiShapesBold>
+              <PiShapesBold size={28}></PiShapesBold>
             ) : (
-              <PiShapesLight size={32}></PiShapesLight>
+              <PiShapesLight size={28}></PiShapesLight>
             )}
           </TooltipTrigger>
           <TooltipContent className="Tooltip">
@@ -290,7 +295,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             onClick={() => handleUndo()}
             className={defaultButtonClassname}
           >
-            <LuUndo size={32}></LuUndo>
+            <LuUndo size={28}></LuUndo>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">{t("undo")}</TooltipContent>
         </Tooltip>
@@ -300,7 +305,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             onClick={() => handleRedo()}
             className={defaultButtonClassname}
           >
-            <LuRedo size={32}></LuRedo>
+            <LuRedo size={28}></LuRedo>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">{t("redo")}</TooltipContent>
         </Tooltip>

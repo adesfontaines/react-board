@@ -6,6 +6,8 @@ import { Tools } from "../../enums/tools";
 import ZoomBar from "../../components/zoomBar";
 import ToolbarBase from "@/app/components/toolbar";
 import { useTranslation } from "@/app/i18n/client";
+import { PiShareNetwork } from "react-icons/pi";
+import { LuUpload } from "react-icons/lu";
 
 export default function Whiteboard({
   params: { lng },
@@ -34,7 +36,23 @@ export default function Whiteboard({
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
-      <NavigationBar lng={lng}></NavigationBar>
+      <NavigationBar
+        t={t}
+        lng={lng}
+        childleft={
+          <button
+            onClick={() => drawingZoneRef.current.exportCanvas()}
+            className="ml-2 p-2 rounded hover:bg-blue-300"
+          >
+            <LuUpload size={28} />
+          </button>
+        }
+        childright={
+          <button>
+            <PiShareNetwork size={28} />
+          </button>
+        }
+      ></NavigationBar>
       <MainCanvas
         historyIndex={historyIndex}
         setHistoryIndex={setHistoryIndex}
@@ -64,6 +82,8 @@ export default function Whiteboard({
       <ZoomBar
         zoom={zoom}
         setZoom={setZoom}
+        t={t}
+        lng={lng}
         requestRedraw={requestRedraw}
       ></ZoomBar>
     </main>

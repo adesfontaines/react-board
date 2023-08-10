@@ -9,5 +9,11 @@
     "undo": "Annuler",
     "redo": "Rétablir",
     "close": "Fermer",
-    "pickColor": "Changer de couleur"
+    "pickColor": "Changer de couleur",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "settings": "Préférences",
+    "zoomIn": "Zoomer",
+    "zoomOut": "Dézoomer",
+    "resetZoom": "Réinitialiser le zoom"
 }

@@ -1,39 +1,39 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeading,
-  DialogDescription,
-  DialogClose,
-} from "./dialog";
-import AuthDialog from "./authDialog";
+import { PiSignOut, PiGear } from "react-icons/pi";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "./popOver";
+import { TFunction } from "i18next";
 
-const NavigationBar: React.FC<{ lng: string }> = ({ lng }) => {
+const NavigationBar: React.FC<{
+  lng: string;
+  t: TFunction<string, undefined>;
+  childleft?: any;
+  childright?: any;
+}> = ({ lng, t, childleft, childright }) => {
   const { data: session } = useSession();
 
   const LoginComponent = () => {
     if (session?.user) {
       const userImageSource = session.user.image as string;
       return (
-        <Popover placement="bottom">
-          <PopoverTrigger className="w-9 h-9">
-            <Image
-              alt="profil pic"
-              className="rounded-full"
-              width={36}
-              height={36}
-              src={userImageSource}
-            />
+        <Popover dismissOutside={true} placement="bottom">
+          <PopoverTrigger>
+            <button className="p-2 mr-2 hover:bg-stone-800">
+              <Image
+                alt="profil pic"
+                className="rounded-full"
+                width={32}
+                height={32}
+                src={userImageSource}
+              />
+            </button>
           </PopoverTrigger>
-          <PopoverContent className="Popover flex w-min flex-col divide-y-2 rounded-lg bg-white shadow-md text-black">
+          <PopoverContent className="Popover flex w-auto flex-col divide-y-2 rounded-lg bg-white shadow-md text-black">
             <div className="flex p-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full">
                 <Image
                   alt="profil pic"
                   className="rounded-full"
@@ -47,15 +47,17 @@ const NavigationBar: React.FC<{ lng: string }> = ({ lng }) => {
                 <p className="text-xs text-gray-500">{session.user?.email}</p>
               </div>
             </div>
-            <div className="flex flex-col py-3">
-              <button className="p-2 pl-4 text-left hover:bg-slate-200">
-                Settings
+            <div className="flex flex-col py-3 text-sm">
+              <button className="p-2 pl-4 text-left hover:bg-slate-200 flex items-center">
+                <PiGear className="pr-2" size={32} />
+                {t("settings")}
               </button>
               <button
                 onClick={() => signOut()}
-                className="p-2 pl-4 text-left hover:bg-slate-200"
+                className="p-2 pl-4 text-left hover:bg-slate-200 flex items-center"
               >
-                Sign out
+                <PiSignOut className="pr-2" size={32} />
+                {t("signOut")}
               </button>
             </div>
           </PopoverContent>
@@ -65,27 +67,23 @@ const NavigationBar: React.FC<{ lng: string }> = ({ lng }) => {
       return (
         <button
           onClick={() => signIn()}
-          className="border-2 rounded-lg border-white py-1 px-3"
+          className="border-2 p-1 mt-2 mr-2 rounded-lg border-white"
         >
-          Sign in
+          {t("signIn")}
         </button>
-        // <Dialog>
-        //   <DialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded shadow-lg transition duration-300">
-        //     Sign in
-        //   </DialogTrigger>
-        //   <DialogContent className="Dialog">
-        //     <AuthDialog lng={lng}></AuthDialog>
-        //   </DialogContent>
-        // </Dialog>
       );
     }
   };
   return (
-    <div className="z-10 top-0 left-0 w-full h-12 shadow-md flex justify-between p-2 bg-stone-700 text-white">
-      <Link href={"/" + lng} className="flex items-center">
-        <h2>Whiteboard</h2>
-      </Link>
-      <div className="float-right">
+    <div className="z-10 top-0 left-0 w-full h-12 shadow-md flex justify-between bg-stone-700 text-white">
+      <div className="flex items-center ml-2">
+        <Link href={"/" + lng}>
+          <h2>Whiteboard</h2>
+        </Link>
+        {childleft}
+      </div>
+      <div className="float-right items-center flex">
+        {childright}
         <LoginComponent />
       </div>
     </div>

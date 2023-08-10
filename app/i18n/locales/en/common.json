@@ -4,10 +4,17 @@
     "toolbarEraserTooltip": "Eraser",
     "toolbarTextTooltip": "Add text",
     "toolbarFormTooltip": "Add form",
+    "toolbarHighlighterTooltip": "Highlighter",
     "loginCaption": "Login",
     "newDashboard": "New Dashboard",
     "undo": "Undo",
     "redo": "Redo",
     "close": "Close",
-    "pickColor": "Pick color"
+    "pickColor": "Pick color",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "settings": "Settings",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "resetZoom": "Reset zoom"
 }
