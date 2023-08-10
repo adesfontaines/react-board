@@ -1,15 +1,16 @@
-export const fallbackLng = 'en'
-export const languages = [fallbackLng, 'fr', 'ja']
-export const defaultNS = 'common'
+export const fallbackLng = "en";
+export const locales = [fallbackLng, "fr", "ja"];
+export type LocaleTypes = (typeof locales)[number];
+export const defaultNS = "common";
 
-export function getOptions (lng = fallbackLng, ns = defaultNS) {
+export function getOptions(lng = fallbackLng, ns = defaultNS) {
   return {
     // debug: true,
-    supportedLngs: languages,
+    supportedLngs: locales,
     fallbackLng,
     lng,
     fallbackNS: defaultNS,
     defaultNS,
-    ns
-  }
+    ns,
+  };
 }

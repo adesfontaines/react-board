@@ -5,10 +5,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'profile.line-scdn.net',
-        port: '',
-        pathname: '',
+        protocol: "https",
+        hostname: "**",
       },
     ],
   },

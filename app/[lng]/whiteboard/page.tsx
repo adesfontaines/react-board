@@ -4,7 +4,7 @@ import MainCanvas from "../../components/mainCanvas";
 import React, { useRef } from "react";
 import { Tools } from "../../enums/tools";
 import ZoomBar from "../../components/zoomBar";
-import ToolbarBase from "@/app/components/toolbar/toolbarBase";
+import ToolbarBase from "@/app/components/toolbar";
 import { useTranslation } from "@/app/i18n/client";
 
 export default function Whiteboard({
@@ -22,7 +22,7 @@ export default function Whiteboard({
 
   const drawingZoneRef = useRef<any>(null);
 
-  const { t } = useTranslation(lng, "common", {});
+  const { t } = useTranslation(lng, "common");
 
   const requestRedraw = () => {
     setTimeout(() => {
