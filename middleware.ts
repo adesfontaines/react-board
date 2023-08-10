@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import acceptLanguage from "accept-language";
-import { fallbackLng, locales } from "../i18n/settings";
+import { fallbackLng, locales } from "./app/i18n/settings";
 
 acceptLanguage.languages(locales);
 
@@ -11,7 +11,7 @@ export const config = {
 
 const cookieName = "i18next";
 
-export function middleware(req: any) {
+export function middleware(req: NextRequest) {
   let lng: string | null | undefined;
   if (req.cookies.has(cookieName)) {
     lng = acceptLanguage.get(req.cookies.get(cookieName).value);
