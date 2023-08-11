@@ -64,17 +64,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   //   }
   // }, []);
 
-  const drawLine = (x0: number, y0: number, x1: number, y1: number) => {
-    const canvas = canvasRef.current as unknown as HTMLCanvasElement;
-    const context = (canvas as HTMLCanvasElement).getContext("2d");
-
-    if (!context) return;
-    context.beginPath();
-    context.moveTo(x0, y0);
-    context.lineTo(x1, y1);
-    context.stroke();
-  };
-
   const exportCanvas = () => {
     // const canvas = canvasRef.current as unknown as HTMLCanvasElement;
     // const link = document.createElement("a");
@@ -93,18 +82,19 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
         ...forms,
         {
           color: currentColor,
-          size: 3,
+          size: drawSize,
           points: [pointer.x, pointer.y],
         },
       ]);
+      setHistoryIndex(forms.length + 1);
     } else if (selectedTool == Tools.Text) {
       const text = "Hello world !"; // Replace with the text you want to add
 
       const textEntry: DrawingValue = {
         color: currentColor,
-        size: 3,
+        size: drawSize,
         text: text,
-        points: [pos.x, pos.y],
+        points: [pointer.x, pointer.y],
       };
       // if (historyIndex != forms.size) {
       //   const arrayTmp = Array.from(forms).slice(0, historyIndex);
@@ -137,8 +127,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   const handleMouseMove = (event) => {
     if (!isDrawing.current) return;
 
-    const stage = event.target.getStage();
-
     switch (selectedTool) {
       case Tools.Pencil:
         let lastLine = forms[forms.length - 1];
@@ -156,12 +144,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
 
         break;
       case Tools.Select:
-        // move the screen
-        // setOffset({
-        //   x: offset.x + (currentPosition.x - prevPosition.x) / zoom,
-        //   y: offset.y + (currentPosition.y - prevPosition.y) / zoom,
-        // });
-        // updateCanvas();
         break;
       case Tools.Eraser:
         // Remove lines within a certain range from the current position
@@ -197,16 +179,21 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     const stage = event.target.getStage();
     const pointer = stage.getPointerPosition();
 
-    var oldZoom = stage.scaleX();
-
-    var mousePointTo = {
-      x: (pointer.x - stage.x()) / oldZoom,
-      y: (pointer.y - stage.y()) / oldZoom,
-    };
+    var oldScale = stage.scaleX();
 
     // how to scale? Zoom in? Or zoom out?
     let direction = event.evt.deltaY > 0 ? 1 : -1;
-    var newScale = direction > 0 ? oldZoom * scaleBy : oldZoom / scaleBy;
+    var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+
+    if (oldScale == newScale) return;
+
+    if (newScale < 0.25) newScale = 0.25;
+    if (newScale > 5.0) newScale = 5.0;
+
+    var mousePointTo = {
+      x: (pointer.x - stage.x()) / oldScale,
+      y: (pointer.y - stage.y()) / oldScale,
+    };
 
     stage.scale({ x: newScale, y: newScale });
 
@@ -248,7 +235,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     >
       <Layer>
         <Text text="Just start drawing" x={5} y={80} />
-        {forms.map((value, key) => (
+        {forms.slice(0, historyIndex).map((value, key) => (
           <Line
             key={key}
             points={value.points}
