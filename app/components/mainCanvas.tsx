@@ -30,10 +30,7 @@ interface DrawingZoneProps {
 }
 
 // eslint-disable-next-line react/display-name
-const MainCanvas: React.ForwardRefRenderFunction<
-  HTMLCanvasElement,
-  DrawingZoneProps
-> = (
+const MainCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   {
     selectedTool,
     forms,
