@@ -19,7 +19,6 @@ interface DrawingZoneProps {
   currentColor: string;
   zoom: number;
   drawSize: number;
-  setZoom: (zoom: number) => void;
   ref: any;
 }
 
@@ -29,8 +28,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     selectedTool,
     forms,
     setForms,
-    zoom,
-    setZoom,
     currentColor,
     drawSize,
     historyIndex,
@@ -46,9 +43,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   useImperativeHandle(ref, () => ({
-    updateCanvas: () => {
-      updateCanvas();
-    },
     exportCanvas: () => {
       exportCanvas();
     },
@@ -70,13 +64,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   //   }
   // }, []);
 
-  const toTrueX = (xScreen: number) => {
-    return xScreen / zoom - offset.x;
-  };
-  const toTrueY = (yScreen: number) => {
-    return yScreen / zoom - offset.y;
-  };
-
   const drawLine = (x0: number, y0: number, x1: number, y1: number) => {
     const canvas = canvasRef.current as unknown as HTMLCanvasElement;
     const context = (canvas as HTMLCanvasElement).getContext("2d");
@@ -95,29 +82,11 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     // link.download = "canva_export.png";
     // link.click();
   };
-  const updateCanvas = () => {
-    const canvas = canvasRef.current as unknown as HTMLCanvasElement;
-    const context = (canvas as HTMLCanvasElement).getContext("2d");
-
-    if (!context) return;
-
-    // set the canvas to the size of the window
-    canvas.width = document.body.clientWidth;
-    canvas.height = document.body.clientHeight;
-
-    context.lineCap = "round";
-    context.font = "32px Arial";
-
-    drawLine(canvas.width / 2, 0, canvas.width / 2, canvas.height);
-
-    context.scale(zoom, zoom);
-    context.translate(offset.x, offset.y);
-  };
 
   const handleMouseDown = (event) => {
     isDrawing.current = true;
 
-    const pos = event.target.getStage().getPointerPosition();
+    const pointer = getTruePointer();
 
     if (selectedTool == Tools.Pencil) {
       setForms([
@@ -125,7 +94,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
         {
           color: currentColor,
           size: 3,
-          points: [pos.x, pos.y],
+          points: [pointer.x, pointer.y],
         },
       ]);
     } else if (selectedTool == Tools.Text) {
@@ -154,11 +123,21 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     }
   };
 
+  const getTruePointer = () => {
+    const stage = canvasRef.current;
+    if (!stage) return;
+
+    const pointer = stage.getPointerPosition();
+
+    return {
+      x: (pointer.x - stage.x()) / stage.scaleX(),
+      y: (pointer.y - stage.y()) / stage.scaleY(),
+    };
+  };
   const handleMouseMove = (event) => {
     if (!isDrawing.current) return;
 
     const stage = event.target.getStage();
-    const point = stage.getPointerPosition();
 
     switch (selectedTool) {
       case Tools.Pencil:
@@ -166,8 +145,10 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
 
         if (!lastLine) return;
 
+        const pointer = getTruePointer();
+
         // add point
-        lastLine.points = lastLine.points.concat([point.x, point.y]);
+        lastLine.points = lastLine.points.concat([pointer.x, pointer.y]);
 
         // replace last
         forms.splice(forms.length - 1, 1, lastLine);
@@ -180,7 +161,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
         //   x: offset.x + (currentPosition.x - prevPosition.x) / zoom,
         //   y: offset.y + (currentPosition.y - prevPosition.y) / zoom,
         // });
-        updateCanvas();
+        // updateCanvas();
         break;
       case Tools.Eraser:
         // Remove lines within a certain range from the current position
@@ -204,7 +185,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
         //     return distance <= radius;
         // });
         // setForms(drawings.filter((line) => !linesToRemove.includes(line)));
-        updateCanvas();
         break;
     }
   };
@@ -213,36 +193,28 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     isDrawing.current = false;
   };
   const handleMouseWheel = (event) => {
-    const canvas = canvasRef.current as unknown as HTMLCanvasElement;
+    var scaleBy = 1.03;
+    const stage = event.target.getStage();
+    const pointer = stage.getPointerPosition();
 
-    const deltaY = event.deltaY;
-    const scaleAmount = -deltaY / 500;
-    let newZoom = zoom * (1 + scaleAmount);
+    var oldZoom = stage.scaleX();
 
-    if (newZoom < 0.25) newZoom = 0.25;
+    var mousePointTo = {
+      x: (pointer.x - stage.x()) / oldZoom,
+      y: (pointer.y - stage.y()) / oldZoom,
+    };
 
-    if (newZoom > 5) newZoom = 5;
+    // how to scale? Zoom in? Or zoom out?
+    let direction = event.evt.deltaY > 0 ? 1 : -1;
+    var newScale = direction > 0 ? oldZoom * scaleBy : oldZoom / scaleBy;
 
-    if (newZoom == zoom) return;
+    stage.scale({ x: newScale, y: newScale });
 
-    setZoom(newZoom);
-    // zoom the page based on where the cursor is
-    var distX = event.pageX / canvas.clientWidth;
-    var distY = event.pageY / canvas.clientHeight;
-
-    // calculate how much we need to zoom
-    const unitsZoomedX = (canvas.clientWidth / zoom) * scaleAmount;
-    const unitsZoomedY = (canvas.clientHeight / zoom) * scaleAmount;
-
-    const unitsAddLeft = unitsZoomedX * distX;
-    const unitsAddTop = unitsZoomedY * distY;
-
-    setOffset({
-      x: offset.x - unitsAddLeft,
-      y: offset.y - unitsAddTop,
-    });
-
-    updateCanvas();
+    var newPos = {
+      x: pointer.x - mousePointTo.x * newScale,
+      y: pointer.y - mousePointTo.y * newScale,
+    };
+    stage.position(newPos);
   };
 
   const cursorStyle = () => {
@@ -261,8 +233,10 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   };
   return (
     <Stage
+      ref={canvasRef}
       width={window.innerWidth}
       height={window.innerHeight}
+      draggable={selectedTool == Tools.Select}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}

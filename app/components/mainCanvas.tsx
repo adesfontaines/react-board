@@ -340,7 +340,7 @@ const MainCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
-      onMouseOut={handleMouseUp}
+      onMouseOut={() => console.log("mouseout")}
       onWheel={handleMouseWheel}
     />
   );
