@@ -14,7 +14,7 @@ const cookieName = "i18next";
 export function middleware(req: NextRequest) {
   let lng: string | null | undefined;
   if (req.cookies.has(cookieName)) {
-    lng = acceptLanguage.get(req.cookies.get(cookieName).value);
+    lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
   }
   if (!lng) {
     lng = acceptLanguage.get(req.headers.get("Accept-Language"));
@@ -34,7 +34,7 @@ export function middleware(req: NextRequest) {
   }
 
   if (req.headers.has("referer")) {
-    const refererUrl = new URL(req.headers.get("referer"));
+    const refererUrl = new URL(req.headers.get("referer")!);
     const lngInReferer = locales.find((l) =>
       refererUrl.pathname.startsWith(`/${l}`)
     );
