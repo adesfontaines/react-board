@@ -42,14 +42,14 @@ export default function Whiteboard({
         childleft={
           <button
             onClick={() => drawingZoneRef.current.exportCanvas()}
-            className="ml-2 p-2 rounded hover:bg-blue-300"
+            className="ml-2 p-2 rounded hover:bg-sky-600"
           >
-            <LuUpload size={28} />
+            <LuUpload size={24} />
           </button>
         }
         childright={
           <button>
-            <PiShareNetwork size={28} />
+            <PiShareNetwork size={24} />
           </button>
         }
       ></NavigationBar>
