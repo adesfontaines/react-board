@@ -1,6 +1,5 @@
 "use client";
 import NavigationBar from "../../components/navigationBar";
-import MainCanvas from "../../components/mainCanvas";
 import React, { useRef } from "react";
 import { Tools } from "../../enums/tools";
 import ZoomBar from "../../components/zoomBar";
@@ -8,6 +7,11 @@ import ToolbarBase from "@/app/components/toolbar";
 import { useTranslation } from "@/app/i18n/client";
 import { PiShareNetwork } from "react-icons/pi";
 import { LuUpload } from "react-icons/lu";
+import dynamic from "next/dynamic";
+
+const Canvas = dynamic(() => import("../../components/konvaCanvas"), {
+  ssr: false,
+});
 
 export default function Whiteboard({
   params: { lng },
@@ -15,7 +19,7 @@ export default function Whiteboard({
   params: any;
 }): React.JSX.Element {
   const [selectedTool, setSelectedTool] = React.useState(Tools.Pencil);
-  const [forms, setForms] = React.useState<Map<string, any>>(new Map());
+  const [forms, setForms] = React.useState<any[]>([]);
   const [historyIndex, setHistoryIndex] = React.useState<number>(0);
 
   const [zoom, setZoom] = React.useState(1.0);
@@ -53,7 +57,7 @@ export default function Whiteboard({
           </button>
         }
       ></NavigationBar>
-      <MainCanvas
+      <Canvas
         historyIndex={historyIndex}
         setHistoryIndex={setHistoryIndex}
         drawSize={drawSize}
@@ -64,9 +68,9 @@ export default function Whiteboard({
         forms={forms}
         setForms={setForms}
         selectedTool={selectedTool}
-      ></MainCanvas>
+      ></Canvas>
       <ToolbarBase
-        maxHistory={forms.size}
+        maxHistory={forms.length}
         historyIndex={historyIndex}
         setHistoryIndex={setHistoryIndex}
         drawSize={drawSize}
