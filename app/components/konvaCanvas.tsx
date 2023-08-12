@@ -3,6 +3,7 @@
 import React, { useRef, useState, useImperativeHandle } from "react";
 import { Stage, Layer, Line, Text } from "react-konva";
 import { Tools } from "../enums/tools";
+import Konva from "konva";
 
 interface DrawingValue {
   color: string;
@@ -37,7 +38,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   },
   ref
 ) => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<Konva.Stage>(null);
   const isDrawing = React.useRef(false);
 
   useImperativeHandle(ref, () => ({
@@ -68,17 +69,19 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   const exportCanvas = () => {
     const stage = canvasRef.current;
 
-    const uri = stage.toDataURL("image/jpeg");
+    if (!stage) return;
+
+    const uri = stage.toDataURL();
 
     var link = document.createElement("a");
     link.download = "canva_export.jpg";
     link.href = uri;
-    document.body.appendCild(link);
+    document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const handleMouseDown = (event) => {
+  const handleMouseDown = () => {
     isDrawing.current = true;
 
     const pointer = getTruePointer();
@@ -105,6 +108,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
         color: currentColor,
         size: drawSize,
         text: text,
+        tool: Tools.Text,
         points: [pointer.x, pointer.y],
       };
       // if (historyIndex != forms.size) {
@@ -125,17 +129,16 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   };
 
   const getTruePointer = () => {
-    const stage = canvasRef.current;
-    if (!stage) return;
+    const stage = canvasRef.current!;
 
-    const pointer = stage.getPointerPosition();
+    const pointer = stage.getPointerPosition()!;
 
     return {
       x: (pointer.x - stage.x()) / stage.scaleX(),
       y: (pointer.y - stage.y()) / stage.scaleY(),
     };
   };
-  const handleMouseMove = (event) => {
+  const handleMouseMove = () => {
     if (!isDrawing.current) return;
 
     switch (selectedTool) {
@@ -162,7 +165,10 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   const handleMouseUp = () => {
     isDrawing.current = false;
   };
-  const handleMouseWheel = (event) => {
+  const handleMouseWheel = (event: {
+    target: { getStage: () => any };
+    evt: { deltaY: number };
+  }) => {
     var scaleBy = 1.02;
     const stage = event.target.getStage();
     const pointer = stage.getPointerPosition();
