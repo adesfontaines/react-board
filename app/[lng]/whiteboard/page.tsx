@@ -1,13 +1,17 @@
 "use client";
 import NavigationBar from "../../components/navigationBar";
-import MainCanvas from "../../components/mainCanvas";
-import React, { useRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import { Tools } from "../../enums/tools";
 import ZoomBar from "../../components/zoomBar";
 import ToolbarBase from "@/app/components/toolbar";
 import { useTranslation } from "@/app/i18n/client";
 import { PiShareNetwork } from "react-icons/pi";
 import { LuUpload } from "react-icons/lu";
+import dynamic from "next/dynamic";
+
+const Canvas = dynamic(() => import("../../components/wrappedCanvas"), {
+  ssr: false,
+});
 
 export default function Whiteboard({
   params: { lng },
@@ -15,7 +19,7 @@ export default function Whiteboard({
   params: any;
 }): React.JSX.Element {
   const [selectedTool, setSelectedTool] = React.useState(Tools.Pencil);
-  const [forms, setForms] = React.useState<Map<string, any>>(new Map());
+  const [forms, setForms] = React.useState<any[]>([]);
   const [historyIndex, setHistoryIndex] = React.useState<number>(0);
 
   const [zoom, setZoom] = React.useState(1.0);
@@ -26,12 +30,10 @@ export default function Whiteboard({
 
   const { t } = useTranslation(lng, "common");
 
-  const requestRedraw = () => {
-    setTimeout(() => {
-      if (drawingZoneRef.current) {
-        drawingZoneRef.current.updateCanvas();
-      }
-    }, 10);
+  const updateScale = (newScale: number) => {
+    if (drawingZoneRef.current) {
+      drawingZoneRef.current.updateScale(newScale);
+    }
   };
 
   return (
@@ -53,20 +55,19 @@ export default function Whiteboard({
           </button>
         }
       ></NavigationBar>
-      <MainCanvas
+      <Canvas
         historyIndex={historyIndex}
         setHistoryIndex={setHistoryIndex}
         drawSize={drawSize}
         currentColor={currentColor}
-        ref={drawingZoneRef}
-        zoom={zoom}
+        canvasRef={drawingZoneRef}
         setZoom={setZoom}
         forms={forms}
         setForms={setForms}
         selectedTool={selectedTool}
-      ></MainCanvas>
+      ></Canvas>
       <ToolbarBase
-        maxHistory={forms.size}
+        maxHistory={forms.length}
         historyIndex={historyIndex}
         setHistoryIndex={setHistoryIndex}
         drawSize={drawSize}
@@ -77,15 +78,8 @@ export default function Whiteboard({
         setSelectedTool={setSelectedTool}
         t={t}
         lng={lng}
-        requestRedraw={requestRedraw}
       ></ToolbarBase>
-      <ZoomBar
-        zoom={zoom}
-        setZoom={setZoom}
-        t={t}
-        lng={lng}
-        requestRedraw={requestRedraw}
-      ></ZoomBar>
+      <ZoomBar zoom={zoom} updateScale={updateScale} t={t} lng={lng}></ZoomBar>
     </main>
   );
 }
