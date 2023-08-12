@@ -76,7 +76,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   const horizontalBarClassname = "text-black flex fixed bottom-2";
   const verticalBarClassname =
-    "text-black flex fixed flex-col justify-center fixed left-2 top-1/4";
+    "Toolbar text-black flex fixed flex-col justify-center fixed left-2 top-1/4";
 
   const handleUndo = () => {
     setHistoryIndex(historyIndex - 1);

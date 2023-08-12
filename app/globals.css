@@ -52,12 +52,29 @@ body {
   box-sizing: border-box;
   width: max-content;
   max-width: calc(100vw - 10px);
+  z-index: 100;
 }
 
+.Popover, .Toolbar{
+  z-index: 50;
+} 
 .tooltip-content {
   transition: opacity 500ms ease-in-out, visibility 500ms ease-in-out;
 }
 
 .color-btn {
   @apply h-8 w-8 transform cursor-pointer rounded-full transition hover:scale-110 border-2 hover:border-4;
+}
+
+.dot {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background-color: black;
+  border-radius: 100%;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  pointer-events: none;
 }

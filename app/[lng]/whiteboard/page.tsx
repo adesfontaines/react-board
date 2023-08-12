@@ -8,6 +8,7 @@ import { useTranslation } from "@/app/i18n/client";
 import { PiShareNetwork } from "react-icons/pi";
 import { LuUpload } from "react-icons/lu";
 import dynamic from "next/dynamic";
+import DrawingCursor from "@/app/components/drawingCursor";
 
 const Canvas = dynamic(() => import("../../components/wrappedCanvas"), {
   ssr: false,
@@ -38,6 +39,7 @@ export default function Whiteboard({
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
+      <DrawingCursor tool={selectedTool} color={currentColor}></DrawingCursor>
       <NavigationBar
         t={t}
         lng={lng}
