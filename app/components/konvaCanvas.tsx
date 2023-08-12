@@ -8,6 +8,7 @@ interface DrawingValue {
   color: string;
   size: number;
   text?: string;
+  tool: Tools;
   points: number[];
 }
 interface DrawingZoneProps {
@@ -17,7 +18,7 @@ interface DrawingZoneProps {
   historyIndex: number;
   setHistoryIndex: (index: number) => void;
   currentColor: string;
-  zoom: number;
+  setZoom: (index: number) => void;
   drawSize: number;
   ref: any;
 }
@@ -31,45 +32,50 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     currentColor,
     drawSize,
     historyIndex,
+    setZoom,
     setHistoryIndex,
   },
   ref
 ) => {
   const canvasRef = useRef(null);
   const isDrawing = React.useRef(false);
-  const [currentDrawId, setCurrentDrawId] = useState<string>("");
-
-  const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   useImperativeHandle(ref, () => ({
     exportCanvas: () => {
       exportCanvas();
     },
+    updateScale: (newScale: number) => {
+      const stage = canvasRef.current;
+
+      if (!stage) return;
+
+      const pointer = {
+        x: stage.width() / 2,
+        y: stage.height() / 2,
+      };
+
+      const newPos = {
+        x: pointer.x - pointer.x * newScale,
+        y: pointer.y - pointer.y * newScale,
+      };
+      setZoom(newScale);
+
+      stage.scale({ x: newScale, y: newScale });
+      stage.position(newPos);
+    },
   }));
 
-  // useEffect(() => {
-  //   if (canvasRef) {
-  //     const canvas = canvasRef.current as unknown as HTMLCanvasElement;
-  //     canvas.oncontextmenu = function () {
-  //       return false;
-  //     };
-
-  //     updateCanvas();
-  //     window.addEventListener("resize", updateCanvas);
-
-  //     return () => {
-  //       window.removeEventListener("resize", updateCanvas);
-  //     };
-  //   }
-  // }, []);
-
   const exportCanvas = () => {
-    // const canvas = canvasRef.current as unknown as HTMLCanvasElement;
-    // const link = document.createElement("a");
-    // link.href = canvas.toDataURL("image/png");
-    // link.download = "canva_export.png";
-    // link.click();
+    const stage = canvasRef.current;
+
+    const uri = stage.toDataURL("image/jpeg");
+
+    var link = document.createElement("a");
+    link.download = "canva_export.jpg";
+    link.href = uri;
+    document.body.appendCild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleMouseDown = (event) => {
@@ -77,16 +83,21 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
 
     const pointer = getTruePointer();
 
-    if (selectedTool == Tools.Pencil) {
+    if (
+      selectedTool == Tools.Pencil ||
+      selectedTool == Tools.Eraser ||
+      selectedTool == Tools.Highlighter
+    ) {
       setForms([
-        ...forms,
+        ...forms.slice(0, historyIndex),
         {
           color: currentColor,
           size: drawSize,
           points: [pointer.x, pointer.y],
+          tool: selectedTool,
         },
       ]);
-      setHistoryIndex(forms.length + 1);
+      setHistoryIndex(historyIndex + 1);
     } else if (selectedTool == Tools.Text) {
       const text = "Hello world !"; // Replace with the text you want to add
 
@@ -129,6 +140,8 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
 
     switch (selectedTool) {
       case Tools.Pencil:
+      case Tools.Eraser:
+      case Tools.Highlighter:
         let lastLine = forms[forms.length - 1];
 
         if (!lastLine) return;
@@ -143,31 +156,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
         setForms(forms.concat());
 
         break;
-      case Tools.Select:
-        break;
-      case Tools.Eraser:
-        // Remove lines within a certain range from the current position
-        const radius = 6; // Adjust this value as needed
-
-        setForms([]);
-        setHistoryIndex(0);
-        // const linesToRemove = [];
-
-        // drawings.forEach((value: DrawingValue, key: string) => {
-        //     if(!value.text)
-        //     {
-
-        //     }
-        // });
-        // const linesToRemove = drawings.values.filter((line) => {
-        //     const distance = Math.sqrt(
-        //         Math.pow(toTrueX(prevPosition.x) - line.x0, 2) +
-        //         Math.pow(toTrueY(prevPosition.y) - line.y0, 2)
-        //     );
-        //     return distance <= radius;
-        // });
-        // setForms(drawings.filter((line) => !linesToRemove.includes(line)));
-        break;
     }
   };
 
@@ -175,7 +163,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     isDrawing.current = false;
   };
   const handleMouseWheel = (event) => {
-    var scaleBy = 1.03;
+    var scaleBy = 1.02;
     const stage = event.target.getStage();
     const pointer = stage.getPointerPosition();
 
@@ -186,7 +174,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
 
     if (oldScale == newScale) return;
-
     if (newScale < 0.25) newScale = 0.25;
     if (newScale > 5.0) newScale = 5.0;
 
@@ -196,6 +183,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     };
 
     stage.scale({ x: newScale, y: newScale });
+    setZoom(newScale);
 
     var newPos = {
       x: pointer.x - mousePointTo.x * newScale,
@@ -221,8 +209,8 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   return (
     <Stage
       ref={canvasRef}
-      width={window.innerWidth}
-      height={window.innerHeight}
+      width={document.body.clientWidth}
+      height={document.body.clientHeight}
       draggable={selectedTool == Tools.Select}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -234,7 +222,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
       }
     >
       <Layer>
-        <Text text="Just start drawing" x={5} y={80} />
         {forms.slice(0, historyIndex).map((value, key) => (
           <Line
             key={key}
@@ -244,7 +231,10 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
             tension={0.5}
             lineCap="round"
             lineJoin="round"
-            globalCompositeOperation="source-over"
+            opacity={value.tool == Tools.Highlighter ? 0.5 : 1}
+            globalCompositeOperation={
+              value.tool == Tools.Eraser ? "destination-out" : "source-over"
+            }
           />
         ))}
       </Layer>

@@ -1,6 +1,6 @@
 "use client";
 import NavigationBar from "../../components/navigationBar";
-import React, { useRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import { Tools } from "../../enums/tools";
 import ZoomBar from "../../components/zoomBar";
 import ToolbarBase from "@/app/components/toolbar";
@@ -9,7 +9,7 @@ import { PiShareNetwork } from "react-icons/pi";
 import { LuUpload } from "react-icons/lu";
 import dynamic from "next/dynamic";
 
-const Canvas = dynamic(() => import("../../components/konvaCanvas"), {
+const Canvas = dynamic(() => import("../../components/wrappedCanvas"), {
   ssr: false,
 });
 
@@ -30,12 +30,10 @@ export default function Whiteboard({
 
   const { t } = useTranslation(lng, "common");
 
-  const requestRedraw = () => {
-    setTimeout(() => {
-      if (drawingZoneRef.current) {
-        drawingZoneRef.current.updateCanvas();
-      }
-    }, 10);
+  const updateScale = (newScale: number) => {
+    if (drawingZoneRef.current) {
+      drawingZoneRef.current.updateScale(newScale);
+    }
   };
 
   return (
@@ -62,8 +60,7 @@ export default function Whiteboard({
         setHistoryIndex={setHistoryIndex}
         drawSize={drawSize}
         currentColor={currentColor}
-        ref={drawingZoneRef}
-        zoom={zoom}
+        canvasRef={drawingZoneRef}
         setZoom={setZoom}
         forms={forms}
         setForms={setForms}
@@ -81,15 +78,8 @@ export default function Whiteboard({
         setSelectedTool={setSelectedTool}
         t={t}
         lng={lng}
-        requestRedraw={requestRedraw}
       ></ToolbarBase>
-      <ZoomBar
-        zoom={zoom}
-        setZoom={setZoom}
-        t={t}
-        lng={lng}
-        requestRedraw={requestRedraw}
-      ></ZoomBar>
+      <ZoomBar zoom={zoom} updateScale={updateScale} t={t} lng={lng}></ZoomBar>
     </main>
   );
 }

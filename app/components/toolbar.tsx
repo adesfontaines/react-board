@@ -36,7 +36,6 @@ export interface ToolbarProps {
   maxHistory: number;
   t?: any;
   lng: string;
-  requestRedraw: () => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
@@ -48,7 +47,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
   setCurrentColor,
   drawSize,
   setDrawSize,
-  requestRedraw,
   historyIndex,
   setHistoryIndex,
   maxHistory,
@@ -82,12 +80,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   const handleUndo = () => {
     setHistoryIndex(historyIndex - 1);
-    requestRedraw();
   };
 
   const handleRedo = () => {
     setHistoryIndex(historyIndex + 1);
-    requestRedraw();
   };
 
   return (
@@ -215,9 +211,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
                               setDrawSize(event?.target.valueAsNumber)
                             }
                             className="slider h-1 w-full"
-                            min="1"
-                            max={8}
-                            step={1}
+                            min="2"
+                            max={12}
+                            step={2}
                           />
                           <span className="ml-2">{drawSize}</span>
                         </div>
