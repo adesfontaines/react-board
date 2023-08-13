@@ -6,6 +6,9 @@ import {
   PiPencilSimpleLineFill,
   PiShapesLight,
   PiShapesBold,
+  PiSquare,
+  PiCircle,
+  PiTriangle,
 } from "react-icons/pi";
 import {
   LuUndo,
@@ -71,7 +74,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   ];
 
   const defaultButtonClassname =
-    "hover:bg-stone-200 rounded p-1 m-1 disabled:opacity-50";
+    "cursor-pointer hover:bg-stone-200 rounded p-1 m-1 disabled:opacity-50";
   const selectedToolClassname = "bg-stone-200 rounded p-1 m-1 border-black";
 
   const horizontalBarClassname = "text-black flex fixed bottom-2";
@@ -115,19 +118,14 @@ const Toolbar: React.FC<ToolbarProps> = ({
               <PopoverTrigger
                 onClick={() => setSelectedTool(Tools.Pencil)}
                 className={
-                  selectedTool == Tools.Pencil || selectedTool == Tools.Eraser
+                  selectedTool == Tools.Pencil ||
+                  selectedTool == Tools.Highlighter ||
+                  selectedTool == Tools.Eraser
                     ? selectedToolClassname
                     : defaultButtonClassname
                 }
               >
-                {selectedTool == Tools.Pencil ||
-                selectedTool == Tools.Eraser ? (
-                  <PiPencilSimpleLineFill size={28}></PiPencilSimpleLineFill>
-                ) : (
-                  <PiPencilSimpleLineDuotone
-                    size={28}
-                  ></PiPencilSimpleLineDuotone>
-                )}
+                <PiPencilSimpleLineDuotone size={28} />
               </PopoverTrigger>
               <PopoverContent className="Popover ml-2 bg-white rounded-md flex flex-col shadow-md text-black">
                 <PopoverClose>
@@ -273,11 +271,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 : defaultButtonClassname
             }
           >
-            {selectedTool == Tools.Form ? (
-              <PiShapesBold size={28}></PiShapesBold>
-            ) : (
-              <PiShapesLight size={28}></PiShapesLight>
-            )}
+            <PiSquare size={28} />
           </TooltipTrigger>
           <TooltipContent className="Tooltip">
             {t("toolbarFormTooltip")}
