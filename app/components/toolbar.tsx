@@ -26,6 +26,8 @@ import {
   PopoverContent,
   PopoverClose,
 } from "./popOver";
+import { createBoardAction } from "../_action";
+import { getBoards } from "../lib/board-db";
 
 export interface ToolbarProps {
   selectedTool: Tools;
@@ -75,7 +77,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   const defaultButtonClassname =
     "cursor-pointer hover:bg-stone-200 rounded p-1 m-1 disabled:opacity-50";
-  const selectedToolClassname = "bg-stone-200 rounded p-1 m-1 border-black";
+  const selectedToolClassname =
+    "cursor-pointer bg-stone-200 rounded p-1 m-1 border-black";
 
   const horizontalBarClassname = "text-black flex fixed bottom-2";
   const verticalBarClassname =
@@ -264,7 +267,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Tooltip>
           <TooltipTrigger
             disabled={true}
-            onClick={() => setSelectedTool(Tools.Form)}
+            onClick={() => console.log(getBoards())}
             className={
               selectedTool == Tools.Form
                 ? selectedToolClassname

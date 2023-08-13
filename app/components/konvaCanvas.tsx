@@ -203,6 +203,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
       case Tools.Select:
         return "cursor-pointer";
       case Tools.Pencil:
+      case Tools.Highlighter:
         return "cursor-none";
       case Tools.Eraser:
         return "cursor-crosshair";
