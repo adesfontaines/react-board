@@ -26,6 +26,7 @@
     "i18next-resources-to-backend": "^1.1.4",
     "konva": "^9.2.0",
     "mongodb": "^5.7.0",
+    "mongodb-client-encryption": "^2.9.0",
     "mongoose": "^7.4.3",
     "next": "^13.4.13",
     "next-auth": "^4.22.5",

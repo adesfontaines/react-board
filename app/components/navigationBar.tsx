@@ -5,17 +5,17 @@ import { PiSignOut, PiGear } from "react-icons/pi";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "./popOver";
-import { TFunction } from "i18next";
+import { useTranslation } from "../i18n/client";
 
 const NavigationBar: React.FC<{
   lng: string;
-  t: TFunction<string, undefined>;
   childleft?: any;
   childright?: any;
-}> = ({ lng, t, childleft, childright }) => {
+}> = ({ lng, childleft, childright }) => {
   const { data: session } = useSession();
 
   const LoginComponent = () => {
+    const { t } = useTranslation(lng, "common");
     if (session?.user) {
       const userImageSource = session.user.image as string;
       return (

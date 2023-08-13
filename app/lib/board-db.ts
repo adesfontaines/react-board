@@ -3,11 +3,12 @@ import connectDB from "./mongodb";
 import { stringToObjectId } from "./utils";
 
 interface BoardFilter {
+    ownerId: string;
     page?: number;
     limit?: number;
 }
 
-export async function getBoards(filter: BoardFilter = {}) {
+export async function getBoards(filter: BoardFilter) {
     try {
         await connectDB();
 
@@ -15,7 +16,7 @@ export async function getBoards(filter: BoardFilter = {}) {
         const limit = filter.limit ?? 10;
         const skip = (page - 1) * limit;
 
-        const boards = await Board.find().skip(skip).limit(limit).lean().exec();
+        const boards = await Board.find({ ownerId: filter.ownerId }).skip(skip).limit(limit).lean().exec();
 
         const results = boards.length;
 
@@ -30,12 +31,11 @@ export async function getBoards(filter: BoardFilter = {}) {
     }
 }
 
-export async function createBoard(title: string) {
+export async function createBoard(title: string, ownerId: string) {
     try {
         await connectDB();
-
-        const board = await Board.create({ title });
-
+        const board = await Board.create({ title, ownerId, createdTime: Date.now(), lastModifiedTime: Date.now() });
+        console.log(board);
         return {
             board,
         };
@@ -69,7 +69,7 @@ export async function getBoard(id: string) {
 
 export async function updateBoard(
     id: string,
-    { title, completed }: { title?: string; completed?: boolean }
+    { title }: { title?: string; }
 ) {
     try {
         await connectDB();
@@ -82,7 +82,7 @@ export async function updateBoard(
 
         const board = await Board.findByIdAndUpdate(
             parsedId,
-            { title, completed },
+            { title },
             { new: true }
         )
             .lean()

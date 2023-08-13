@@ -26,8 +26,7 @@ import {
   PopoverContent,
   PopoverClose,
 } from "./popOver";
-import { createBoardAction } from "../_action";
-import { getBoards } from "../lib/board-db";
+import { createBoard } from "../lib/board-db";
 
 export interface ToolbarProps {
   selectedTool: Tools;
@@ -267,7 +266,15 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Tooltip>
           <TooltipTrigger
             disabled={true}
-            onClick={() => console.log(getBoards())}
+            onClick={() =>
+              console.log(
+                createBoardAction({
+                  title: "toto",
+                  ownerId: "ABC-DEF-GHI",
+                  path: "/api/boards",
+                })
+              )
+            }
             className={
               selectedTool == Tools.Form
                 ? selectedToolClassname

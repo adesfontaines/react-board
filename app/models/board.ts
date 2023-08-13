@@ -32,14 +32,22 @@ import mongoose from "mongoose";
     allowMixed: Severity.ALLOW,
   },
 })
-@index({ title: 1 })
+// @index({ title: 1 })
 class BoardClass {
-  @prop({ required: true, unique: true })
+  @prop({ required: true })
   title: string;
-
+  @prop({ required: true })
+  ownerId: string;
+  @prop({ required: true })
+  createdTime: Date;
+  @prop({ required: true })
+  lastModifiedTime: Date;
+  @prop({ default: false })
+  isShared: boolean;
+  @prop()
+  drawings: any[];
   @prop({ default: false })
   completed: boolean;
-
   _id: mongoose.Types.ObjectId | string;
 
   id: string;
