@@ -37,7 +37,6 @@ export async function createBoard(title: string, ownerId: string) {
     try {
         await connectDB();
         const board = await Board.create({ title, ownerId, createdTime: Date.now(), lastModifiedTime: Date.now() });
-        console.log(board);
         return {
             board,
         };
@@ -82,7 +81,6 @@ export async function updateBoard(
         if (!parsedId) {
             return { error: "Board not found" };
         }
-        console.log(title, drawings);
         const board = await Board.findByIdAndUpdate(
             parsedId,
             { title, drawings, lastModifiedTime: Date.now() },

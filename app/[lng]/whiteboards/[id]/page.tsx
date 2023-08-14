@@ -6,7 +6,6 @@ import ZoomBar from "../../../components/zoomBar";
 import ToolbarBase from "@/app/components/toolbar";
 import { useTranslation } from "@/app/i18n/client";
 import {
-  PiShareNetwork,
   PiCloudArrowUp,
   PiHouse,
   PiUpload,
@@ -31,6 +30,7 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
   const [zoom, setZoom] = React.useState(1.0);
   const [currentColor, setCurrentColor] = React.useState("#000000");
   const [drawSize, setDrawSize] = React.useState(3);
+
   const [isEdited, setIsEdited] = React.useState(false);
 
   const drawingZoneRef = useRef<any>(null);
@@ -45,12 +45,11 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
         setHistoryIndex(data.board.drawings.length);
       }
     });
-    let intervalId = setInterval(saveBoard, 10000);
 
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [id]);
+    const timer = setTimeout(() => isEdited && saveBoard(), 10000);
+    return () => clearTimeout(timer);
+  }, [id, isEdited]);
+
   const updateScale = (newScale: number) => {
     if (drawingZoneRef.current) {
       drawingZoneRef.current.updateScale(newScale);
@@ -60,15 +59,11 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
   async function saveBoard(): Promise<void> {
     if (!board) return;
 
-    console.log("édité?", isEdited);
-    if (isEdited) {
-      const updatedBoard = board;
-      updatedBoard.drawings = forms!;
-      setBoard(updatedBoard);
-      setIsEdited(false);
-      console.log("ca sauvegarde patience...");
-      await updateBoardAction(updatedBoard._id, board, "/");
-    }
+    const updatedBoard = board;
+    updatedBoard.drawings = forms!;
+    setBoard(updatedBoard);
+    setIsEdited(false);
+    await updateBoardAction(updatedBoard._id, board, "/");
   }
 
   if (board)
@@ -102,11 +97,6 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
               </div>
             </div>
           }
-          childright={
-            <button>
-              <PiShareNetwork size={24} />
-            </button>
-          }
         ></NavigationBar>
         <Canvas
           historyIndex={historyIndex}
@@ -118,6 +108,7 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
           forms={forms}
           setForms={setForms}
           selectedTool={selectedTool}
+          isEdited={isEdited}
           setIsEdited={setIsEdited}
         ></Canvas>
         <ToolbarBase
