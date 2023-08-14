@@ -1,19 +1,16 @@
 import connectDB from "@/app/lib/mongoose";
 import { deleteBoard, getBoard, updateBoard } from "@/app/lib/board-db";
 import { createErrorResponse } from "@/app/lib/utils";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { getServerSession } from "next-auth";
 
 export async function GET(
-    _request: Request,
+    _request: NextRequest,
     { params }: { params: { id: string } }
 ) {
     try {
         await connectDB();
         const token = await getToken({ req: _request });
-
-        const session = await getServerSession(_request);
 
         if (token) {
             // Signed in

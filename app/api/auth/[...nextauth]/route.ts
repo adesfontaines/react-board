@@ -4,26 +4,27 @@ import LinkedInProvider from "next-auth/providers/linkedin";
 import LineProvider from "next-auth/providers/line";
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import clientPromise from "@/app/lib/mongodb";
-export const authOptions = {
+
+export const authOptions: any = {
     callbacks: {
-        session: async (session, token, user) => {
+        session: async (session: any) => {
             return Promise.resolve(session);
         }
     },
     adapter: MongoDBAdapter(clientPromise),
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
         }),
         LinkedInProvider({
-            clientId: process.env.LINKEDIN_CLIENT_ID,
-            clientSecret: process.env.LINKEDIN_CLIENT_SECRET
+            clientId: process.env.LINKEDIN_CLIENT_ID!,
+            clientSecret: process.env.LINKEDIN_CLIENT_SECRET!
         }),
 
         LineProvider({
-            clientId: process.env.LINE_CLIENT_ID,
-            clientSecret: process.env.LINE_CLIENT_SECRET
+            clientId: process.env.LINE_CLIENT_ID!,
+            clientSecret: process.env.LINE_CLIENT_SECRET!
         }),
     ],
 }

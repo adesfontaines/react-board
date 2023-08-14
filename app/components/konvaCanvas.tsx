@@ -106,29 +106,14 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
       ]);
       setHistoryIndex(historyIndex + 1);
     } else if (selectedTool == Tools.Text) {
-      const text = "Hello world !"; // Replace with the text you want to add
-
-      const textEntry: DrawingValue = {
-        color: currentColor,
-        size: drawSize,
-        text: text,
-        tool: Tools.Text,
-        points: [pointer.x, pointer.y],
-      };
-      // if (historyIndex != forms.size) {
-      //   const arrayTmp = Array.from(forms).slice(0, historyIndex);
-      //   arrayTmp.push([uuid, textEntry]);
-      //   setForms(new Map(arrayTmp));
-      // } else {
-      //   setForms(forms.set(uuid, textEntry));
-      // }
-
-      //   setHistoryIndex(historyIndex + 1);
-
-      //   context.fillStyle = currentColor;
-
-      //   // Draw the text on the canvas
-      //   context?.fillText(text, scaledX, scaledY);
+      // const text = "Hello world !"; // Replace with the text you want to add
+      // const textEntry: DrawingValue = {
+      //   color: currentColor,
+      //   size: drawSize,
+      //   text: text,
+      //   tool: Tools.Text,
+      //   points: [pointer.x, pointer.y],
+      // };
     }
   };
 

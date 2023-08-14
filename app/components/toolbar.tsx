@@ -34,14 +34,12 @@ export interface ToolbarProps {
   setHistoryIndex: (index: number) => void;
   maxHistory: number;
   t?: any;
-  lng: string;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
   selectedTool,
   setSelectedTool,
   t,
-  lng,
   currentColor,
   setCurrentColor,
   drawSize,

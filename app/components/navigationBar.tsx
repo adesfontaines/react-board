@@ -13,7 +13,6 @@ const NavigationBar: React.FC<{
 }> = ({ lng, childleft, childright }) => {
   const { data: session, status } = useSession();
   const { t } = useTranslation(lng, "common");
-  const userImageSource = session?.user.image as string;
   return (
     <div className="z-10 top-0 left-0 w-full h-12 shadow-md flex justify-between bg-stone-700 text-white">
       <div className="flex items-center ml-2">{childleft}</div>
@@ -27,13 +26,12 @@ const NavigationBar: React.FC<{
             >
               <div>
                 <Image
-                  key={userImageSource}
                   alt="profil pic"
                   priority={true}
                   className="rounded-full"
                   width={32}
                   height={32}
-                  src={userImageSource}
+                  src={session.user.image!}
                 />
               </div>
             </PopoverTrigger>
@@ -45,7 +43,7 @@ const NavigationBar: React.FC<{
                     className="rounded-full"
                     width={48}
                     height={48}
-                    src={userImageSource}
+                    src={session.user.image!}
                   />
                 </div>
                 <div className="ml-4">

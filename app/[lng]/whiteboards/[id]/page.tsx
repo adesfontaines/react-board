@@ -63,10 +63,10 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
     updatedBoard.drawings = forms!;
     setBoard(updatedBoard);
     setIsEdited(false);
-    await updateBoardAction(updatedBoard._id, board, "/");
+    await updateBoardAction(updatedBoard._id.toString(), board, "/");
   }
 
-  if (board)
+  if (forms)
     return (
       <main className="flex min-h-screen flex-col items-center justify-between">
         <DrawingCursor tool={selectedTool} color={currentColor}></DrawingCursor>
@@ -112,7 +112,7 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
           setIsEdited={setIsEdited}
         ></Canvas>
         <ToolbarBase
-          maxHistory={forms.length}
+          maxHistory={forms?.length}
           historyIndex={historyIndex}
           setHistoryIndex={setHistoryIndex}
           drawSize={drawSize}
@@ -122,7 +122,6 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
           selectedTool={selectedTool}
           setSelectedTool={setSelectedTool}
           t={t}
-          lng={lng}
         ></ToolbarBase>
         <ZoomBar
           zoom={zoom}
