@@ -1,5 +1,3 @@
-[![Deployment status](https://github.com/adesfontaines/react-board/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/adesfontaines/react-board/actions/workflows/firebase-hosting-merge.yml)
-
 A whiteboard app made in react and powered by [Next.js](https://nextjs.org/).
 
 ## Getting Started
