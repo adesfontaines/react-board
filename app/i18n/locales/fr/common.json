@@ -1,4 +1,5 @@
 {
+    "localeName": "Français",
     "toolbarSelectTooltip": "Sélectionner",
     "toolbarPencilTooltip": "Dessiner",
     "toolbarEraserTooltip": "Effacer",
@@ -15,5 +16,8 @@
     "settings": "Préférences",
     "zoomIn": "Zoomer",
     "zoomOut": "Dézoomer",
-    "resetZoom": "Réinitialiser le zoom"
+    "resetZoom": "Réinitialiser le zoom",
+    "untitled": "Sans titre",
+    "edit": "Editer",
+    "delete": "Supprimer"
 }

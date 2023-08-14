@@ -2,10 +2,15 @@ import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
 import LinkedInProvider from "next-auth/providers/linkedin";
 import LineProvider from "next-auth/providers/line";
-import connectDB from "../../../lib/mongodb";
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
-const handler = NextAuth({
-    adapter: MongoDBAdapter(connectDB),
+import clientPromise from "@/app/lib/mongodb";
+export const authOptions = {
+    callbacks: {
+        session: async (session, token, user) => {
+            return Promise.resolve(session);
+        }
+    },
+    adapter: MongoDBAdapter(clientPromise),
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
@@ -21,6 +26,7 @@ const handler = NextAuth({
             clientSecret: process.env.LINE_CLIENT_SECRET
         }),
     ],
-})
+}
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }

@@ -10,7 +10,9 @@ const DrawingCursor: React.FC<{ tool: Tools; color: string }> = ({
   return (
     <div
       className={
-        tool == Tools.Pencil || tool == Tools.Highlighter
+        tool == Tools.Pencil ||
+        tool == Tools.Highlighter ||
+        tool == Tools.Eraser
           ? "dot border border-white"
           : "hidden"
       }

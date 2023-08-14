@@ -1,4 +1,4 @@
-import connectDB from "@/app/lib/mongodb";
+import connectDB from "@/app/lib/mongoose";
 import { createBoard, getBoards } from "@/app/lib/board-db";
 import { createErrorResponse } from "@/app/lib/utils";
 import { NextRequest, NextResponse } from "next/server";

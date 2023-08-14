@@ -21,6 +21,7 @@ interface DrawingZoneProps {
   currentColor: string;
   setZoom: (index: number) => void;
   drawSize: number;
+  setIsEdited: (edited: boolean) => void;
   ref: any;
 }
 
@@ -35,6 +36,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     historyIndex,
     setZoom,
     setHistoryIndex,
+    setIsEdited,
   },
   ref
 ) => {
@@ -164,6 +166,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
 
   const handleMouseUp = () => {
     isDrawing.current = false;
+    setIsEdited(true);
   };
   const handleMouseWheel = (event: {
     target: { getStage: () => any };
@@ -204,9 +207,8 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
         return "cursor-pointer";
       case Tools.Pencil:
       case Tools.Highlighter:
-        return "cursor-none";
       case Tools.Eraser:
-        return "cursor-crosshair";
+        return "cursor-none";
       case Tools.Text:
         return "cursor-text";
       default:

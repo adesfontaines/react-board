@@ -1,4 +1,5 @@
 {
+    "localeName": "English",
     "toolbarSelectTooltip": "Select",
     "toolbarPencilTooltip": "Inking",
     "toolbarEraserTooltip": "Eraser",
@@ -16,5 +17,8 @@
     "settings": "Settings",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
-    "resetZoom": "Reset zoom"
+    "resetZoom": "Reset zoom",
+    "untitled": "Untitled",
+    "edit": "Edit",
+    "delete": "Delete"
 }

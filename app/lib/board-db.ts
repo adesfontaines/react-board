@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useSession } from "next-auth/react";
 import { Board } from "../models/board";
-import connectDB from "./mongodb";
+import connectDB from "./mongoose";
 import { stringToObjectId } from "./utils";
 
 interface BoardFilter {
@@ -46,6 +48,7 @@ export async function createBoard(title: string, ownerId: string) {
 
 export async function getBoard(id: string) {
     try {
+        // const { data: session } = useSession()
         await connectDB();
 
         const parsedId = stringToObjectId(id);
@@ -53,7 +56,7 @@ export async function getBoard(id: string) {
         if (!parsedId) {
             return { error: "Board not found" };
         }
-
+        // console.log(session);
         const board = await Board.findById(parsedId).lean().exec();
         if (board) {
             return {
@@ -69,7 +72,7 @@ export async function getBoard(id: string) {
 
 export async function updateBoard(
     id: string,
-    { title }: { title?: string; }
+    { title, drawings }: { title?: string; drawings?: any[] }
 ) {
     try {
         await connectDB();
@@ -79,10 +82,10 @@ export async function updateBoard(
         if (!parsedId) {
             return { error: "Board not found" };
         }
-
+        console.log(title, drawings);
         const board = await Board.findByIdAndUpdate(
             parsedId,
-            { title },
+            { title, drawings, lastModifiedTime: Date.now() },
             { new: true }
         )
             .lean()

@@ -1,9 +1,23 @@
 "use server";
 
-import { createBoard, deleteBoard, getBoards, updateBoard } from "./lib/board-db";
+import { createBoard, deleteBoard, getBoard, getBoards, updateBoard } from "./lib/board-db";
 import { revalidatePath } from "next/cache";
 
-export async function getUserBoards({
+export async function getBoardByIdAction({
+    ownerId,
+    id,
+    path
+}: {
+    ownerId: string,
+    id: string,
+    path: string
+}) {
+    const board = await getBoard(id);
+    revalidatePath(path);
+    return board;
+}
+
+export async function getUserBoardsAction({
     ownerId,
     path
 }: {
@@ -27,9 +41,10 @@ export async function createBoardAction({
     ownerId: string;
     path: string;
 }) {
-    await createBoard(title, ownerId);
-    console.log("c'est fait")
+    const createdBoard = await createBoard(title, ownerId);
     revalidatePath(path);
+
+    return createdBoard;
 }
 
 
@@ -38,7 +53,7 @@ export async function createBoardAction({
  */
 export async function updateBoardAction(
     id: string,
-    update: { title?: string; ownerId?: string },
+    update: { title?: string; drawings?: any[], lastModifiedTime?: Date, ownerId?: string },
     path: string
 ) {
     await updateBoard(id, update);

@@ -1,7 +1,9 @@
-import connectDB from "@/app/lib/mongodb";
+import connectDB from "@/app/lib/mongoose";
 import { deleteBoard, getBoard, updateBoard } from "@/app/lib/board-db";
 import { createErrorResponse } from "@/app/lib/utils";
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { getServerSession } from "next-auth";
 
 export async function GET(
     _request: Request,
@@ -9,6 +11,19 @@ export async function GET(
 ) {
     try {
         await connectDB();
+        const token = await getToken({ req: _request });
+
+        const session = await getServerSession(_request);
+
+        if (token) {
+            // Signed in
+            console.log("JSON Web Token", JSON.stringify(token, null, 2))
+        } else {
+            console.log(token);
+            // Not Signed in
+            return createErrorResponse("Invalid Authorization", 401);
+        }
+
 
         const id = params.id;
         const { board, error } = await getBoard(id);

@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import React from "react";
 import { PiSignOut, PiGear } from "react-icons/pi";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -12,34 +11,32 @@ const NavigationBar: React.FC<{
   childleft?: any;
   childright?: any;
 }> = ({ lng, childleft, childright }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const LoginComponent = () => {
     const { t } = useTranslation(lng, "common");
     if (session?.user) {
-      const userImageSource = session.user.image as string;
       return (
         <Popover dismissOutside={true} placement="bottom">
-          <PopoverTrigger>
-            <button className="p-2 mr-2 hover:bg-stone-800">
-              <Image
-                alt="profil pic"
-                className="rounded-full"
-                width={32}
-                height={32}
-                src={userImageSource}
-              />
-            </button>
+          <PopoverTrigger className="p-2 mr-2 hover:bg-stone-800">
+            <Image
+              alt="profil pic"
+              priority={true}
+              className="rounded-full"
+              width={32}
+              height={32}
+              src={session.user.image}
+            />
           </PopoverTrigger>
           <PopoverContent className="Popover flex w-auto flex-col divide-y-2 rounded-lg bg-white shadow-md text-black">
-            <div className="flex p-3">
+            <div className="flex p-3 w-40">
               <div className="flex h-12 w-12 items-center justify-center rounded-full">
                 <Image
                   alt="profil pic"
                   className="rounded-full"
                   width={48}
                   height={48}
-                  src={userImageSource}
+                  src={session.user.image!}
                 />
               </div>
               <div className="ml-4">
@@ -63,7 +60,7 @@ const NavigationBar: React.FC<{
           </PopoverContent>
         </Popover>
       );
-    } else {
+    } else if (status != "loading") {
       return (
         <button
           onClick={() => signIn()}
@@ -76,12 +73,7 @@ const NavigationBar: React.FC<{
   };
   return (
     <div className="z-10 top-0 left-0 w-full h-12 shadow-md flex justify-between bg-stone-700 text-white">
-      <div className="flex items-center ml-2">
-        <Link href={"/" + lng}>
-          <h2>Whiteboard</h2>
-        </Link>
-        {childleft}
-      </div>
+      <div className="flex items-center ml-2">{childleft}</div>
       <div className="float-right items-center flex">
         {childright}
         <LoginComponent />
