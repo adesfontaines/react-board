@@ -9,11 +9,15 @@ const DrawingCursor: React.FC<{ tool: Tools; color: string }> = ({
   const { x, y } = useMousePosition();
   return (
     <div
-      className={tool == Tools.Pencil ? "dot border border-white" : "hidden"}
+      className={
+        tool == Tools.Pencil ||
+        tool == Tools.Highlighter ||
+        tool == Tools.Eraser
+          ? "dot border border-white"
+          : "hidden"
+      }
       style={{ left: `${x}px`, top: `${y}px`, backgroundColor: color }}
-    >
-      {tool}
-    </div>
+    ></div>
   );
 };
 

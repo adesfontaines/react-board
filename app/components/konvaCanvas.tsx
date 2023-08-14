@@ -21,6 +21,8 @@ interface DrawingZoneProps {
   currentColor: string;
   setZoom: (index: number) => void;
   drawSize: number;
+  isEdited: boolean;
+  setIsEdited: (edited: boolean) => void;
   ref: any;
 }
 
@@ -35,6 +37,8 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     historyIndex,
     setZoom,
     setHistoryIndex,
+    isEdited,
+    setIsEdited,
   },
   ref
 ) => {
@@ -102,29 +106,14 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
       ]);
       setHistoryIndex(historyIndex + 1);
     } else if (selectedTool == Tools.Text) {
-      const text = "Hello world !"; // Replace with the text you want to add
-
-      const textEntry: DrawingValue = {
-        color: currentColor,
-        size: drawSize,
-        text: text,
-        tool: Tools.Text,
-        points: [pointer.x, pointer.y],
-      };
-      // if (historyIndex != forms.size) {
-      //   const arrayTmp = Array.from(forms).slice(0, historyIndex);
-      //   arrayTmp.push([uuid, textEntry]);
-      //   setForms(new Map(arrayTmp));
-      // } else {
-      //   setForms(forms.set(uuid, textEntry));
-      // }
-
-      //   setHistoryIndex(historyIndex + 1);
-
-      //   context.fillStyle = currentColor;
-
-      //   // Draw the text on the canvas
-      //   context?.fillText(text, scaledX, scaledY);
+      // const text = "Hello world !"; // Replace with the text you want to add
+      // const textEntry: DrawingValue = {
+      //   color: currentColor,
+      //   size: drawSize,
+      //   text: text,
+      //   tool: Tools.Text,
+      //   points: [pointer.x, pointer.y],
+      // };
     }
   };
 
@@ -163,6 +152,9 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   };
 
   const handleMouseUp = () => {
+    if (isDrawing.current) {
+      setIsEdited(true);
+    }
     isDrawing.current = false;
   };
   const handleMouseWheel = (event: {
@@ -203,9 +195,9 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
       case Tools.Select:
         return "cursor-pointer";
       case Tools.Pencil:
-        return "cursor-none";
+      case Tools.Highlighter:
       case Tools.Eraser:
-        return "cursor-crosshair";
+        return "cursor-none";
       case Tools.Text:
         return "cursor-text";
       default:
