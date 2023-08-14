@@ -65,12 +65,13 @@ const NavigationBar: React.FC<{
       );
     } else {
       return (
-        <button
-          onClick={() => signIn()}
-          className="border-2 p-1 mt-2 mr-2 rounded-lg border-white"
-        >
-          {t("signIn")}
-        </button>
+        <span></span>
+        // <button
+        //   onClick={() => signIn()}
+        //   className="border-2 p-1 mt-2 mr-2 rounded-lg border-white"
+        // >
+        //   {t("signIn")}
+        // </button>
       );
     }
   };
