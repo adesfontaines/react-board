@@ -11,7 +11,8 @@ interface ZoomBarProps {
 }
 
 const ZoomBar: React.FC<ZoomBarProps> = ({ zoom, updateScale, t, lng }) => {
-  const defaultButtonClassname = "hover:bg-stone-200 rounded p-1 m-1";
+  const defaultButtonClassname =
+    "cursor-pointer hover:bg-stone-200 rounded p-1 m-1";
 
   const animatedZoom = useSpring({
     number: zoom,
@@ -23,7 +24,7 @@ const ZoomBar: React.FC<ZoomBarProps> = ({ zoom, updateScale, t, lng }) => {
     updateScale(newZoom);
   };
   return (
-    <div className="fixed bg-white text-black rounded-md flex items-center mb-2 shadow-md bottom-1 justify-items right-1">
+    <div className="fixed z-10 bg-white text-black rounded-md flex items-center mb-2 shadow-md bottom-1 justify-items right-1">
       <Tooltip placement="top">
         <TooltipTrigger
           onClick={() => setZoomIfInLimit(zoom - 0.25)}

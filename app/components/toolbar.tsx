@@ -1,14 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   PiCursor,
   PiCursorFill,
   PiPencilSimpleLineDuotone,
   PiPencilSimpleLineFill,
-  PiShapesLight,
-  PiShapesBold,
   PiSquare,
-  PiCircle,
-  PiTriangle,
 } from "react-icons/pi";
 import {
   LuUndo,
@@ -38,14 +34,12 @@ export interface ToolbarProps {
   setHistoryIndex: (index: number) => void;
   maxHistory: number;
   t?: any;
-  lng: string;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
   selectedTool,
   setSelectedTool,
   t,
-  lng,
   currentColor,
   setCurrentColor,
   drawSize,
@@ -75,7 +69,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   const defaultButtonClassname =
     "cursor-pointer hover:bg-stone-200 rounded p-1 m-1 disabled:opacity-50";
-  const selectedToolClassname = "bg-stone-200 rounded p-1 m-1 border-black";
+  const selectedToolClassname =
+    "cursor-pointer bg-stone-200 rounded p-1 m-1 border-black";
 
   const horizontalBarClassname = "text-black flex fixed bottom-2";
   const verticalBarClassname =
@@ -264,7 +259,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Tooltip>
           <TooltipTrigger
             disabled={true}
-            onClick={() => setSelectedTool(Tools.Form)}
             className={
               selectedTool == Tools.Form
                 ? selectedToolClassname
