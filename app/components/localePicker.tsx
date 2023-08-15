@@ -11,17 +11,12 @@ const LocalePicker: React.FC<{ lng: string }> = ({ lng }) => {
       <select
         onChange={(event) => router.push("/" + event.target.value)}
         id="countries"
+        defaultValue={lng}
         className="bg-transparent text-sm"
       >
-        <option value="fr" selected={lng == "fr"}>
-          Français
-        </option>
-        <option value="en" selected={lng == "en"}>
-          English
-        </option>
-        <option value="ja" selected={lng == "ja"}>
-          日本語
-        </option>
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
       </select>
     </div>
   );

@@ -12,7 +12,7 @@ export default async function Home({ params: { lng } }: { params: any }) {
       <main className="flex min-h-screen flex-col items-center justify-between">
         <NavigationBar
           childleft={
-            <Link href={"/" + lng}>
+            <Link href={"/"} locale={lng}>
               <h2>Whiteboard</h2>
             </Link>
           }

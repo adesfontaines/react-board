@@ -88,19 +88,21 @@ const Toolbar: React.FC<ToolbarProps> = ({
     <div className={verticalBarClassname}>
       <div className="bg-white rounded-md flex flex-col mb-2 shadow-md">
         <Tooltip>
-          <TooltipTrigger
-            onClick={() => setSelectedTool(Tools.Select)}
-            className={
-              selectedTool == Tools.Select
-                ? selectedToolClassname
-                : defaultButtonClassname
-            }
-          >
-            {selectedTool == Tools.Select ? (
-              <PiCursorFill size={28}></PiCursorFill>
-            ) : (
-              <PiCursor size={28}></PiCursor>
-            )}
+          <TooltipTrigger>
+            <button
+              onClick={() => setSelectedTool(Tools.Select)}
+              className={
+                selectedTool == Tools.Select
+                  ? selectedToolClassname
+                  : defaultButtonClassname
+              }
+            >
+              {selectedTool == Tools.Select ? (
+                <PiCursorFill size={28}></PiCursorFill>
+              ) : (
+                <PiCursor size={28}></PiCursor>
+              )}
+            </button>
           </TooltipTrigger>
           <TooltipContent className="Tooltip">
             {t("toolbarSelectTooltip")}

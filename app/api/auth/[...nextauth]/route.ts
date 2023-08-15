@@ -22,12 +22,11 @@ export const authOptions: any = {
             clientId: process.env.LINKEDIN_CLIENT_ID!,
             clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
         }),
-
         LineProvider({
             clientId: process.env.LINE_CLIENT_ID!,
             clientSecret: process.env.LINE_CLIENT_SECRET!
         }),
-    ],
+    ]
 }
 const handler = NextAuth(authOptions)
 
