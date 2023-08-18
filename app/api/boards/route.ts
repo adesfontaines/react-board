@@ -7,7 +7,6 @@ export async function GET(request: NextRequest) {
     try {
         await connectDB();
 
-        console.log(request);
         const page_str = request.nextUrl.searchParams.get("page");
         const limit_str = request.nextUrl.searchParams.get("limit");
         const ownerId = request.nextUrl.searchParams.get("ownerId");

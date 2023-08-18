@@ -2,13 +2,11 @@
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import "../../globals.css";
-import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 export default function SignIn({ params, searchParams }) {
-  const router = useRouter();
   const { t } = useTranslation(params.lng, "common");
-  console.log(searchParams);
+
   return (
     <div className="flex h-full items-center justify-center  md:bg-gradient-to-b from-indigo-200 via-red-200 to-yellow-100 text-black md:flex-row md:justify-end">
       <div className="hidden h-max justify-center p-10 text-white md:block md:w-1/2">
@@ -22,7 +20,9 @@ export default function SignIn({ params, searchParams }) {
           <h2 className="mb-4 text-2xl font-semibold">{t("signInTitle")}</h2>
           <div className="mb-4 text-white">
             <button
-              onClick={() => signIn("google")}
+              onClick={() =>
+                signIn("google", { callbackUrl: "/" + params.lng })
+              }
               className="mb-2 shadow w-full flex rounded-lg items-center justify-center text-black bg-white px-4 py-2"
             >
               <Image
@@ -35,7 +35,9 @@ export default function SignIn({ params, searchParams }) {
               <span className="w-full">{t("logInGoogle")}</span>
             </button>
             <button
-              onClick={() => signIn("line")}
+              onClick={() =>
+                signIn("linkedin", { callbackUrl: "/" + params.lng })
+              }
               className="mb-2 shadow w-full flex rounded-lg items-center justify-center text-white hover:brightness-70 bg-[#006699] px-4 py-2"
             >
               <Image
@@ -48,7 +50,7 @@ export default function SignIn({ params, searchParams }) {
               <span className="w-full">{t("logInLinkedIn")}</span>
             </button>
             <button
-              onClick={() => signIn("line")}
+              onClick={() => signIn("line", { callbackUrl: "/" + params.lng })}
               className="mb-2 shadow w-full flex rounded-lg items-center justify-center text-white bg-[#01c300] px-4 py-2"
             >
               <Image
@@ -70,12 +72,12 @@ export default function SignIn({ params, searchParams }) {
           <div>
             <input
               type="email"
-              placeholder="Email"
+              placeholder={t("email")}
               className="mb-2 w-full rounded-lg border px-4 py-2"
             />
             <input
               type="password"
-              placeholder="Password"
+              placeholder={t("password")}
               className="mb-4 w-full rounded-lg border px-4 py-2"
             />
             <button className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white">

@@ -172,7 +172,11 @@ export const PopoverContent = React.forwardRef<
 
   return (
     <FloatingPortal>
-      <FloatingFocusManager context={floatingContext} modal={context.modal}>
+      <FloatingFocusManager
+        initialFocus={-1}
+        context={floatingContext}
+        modal={context.modal}
+      >
         <div
           ref={ref}
           style={{ ...context.floatingStyles, ...style }}

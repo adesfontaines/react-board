@@ -7,14 +7,13 @@ import { useTranslation } from "../i18n/client";
 const ProfileActions: React.FC<{ lng: string }> = ({ lng }) => {
   const { t } = useTranslation(lng, "common");
   return (
-    <div className="flex flex-col py-3 text-sm">
-      <div className="hidden" autoFocus></div>
+    <div>
       <button className="p-2 pl-4 text-left hover:bg-slate-200 flex items-center">
         <PiGear className="pr-2" size={32} />
         {t("settings")}
       </button>
       <button
-        onClick={() => signOut()}
+        onClick={() => signOut({ callbackUrl: "/" + lng + "/signin" })}
         className="p-2 pl-4 text-left hover:bg-slate-200 flex items-center"
       >
         <PiSignOut className="pr-2" size={32} />

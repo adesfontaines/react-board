@@ -21,7 +21,7 @@ const WhiteboardList: React.FC<{ lng: string }> = async ({ lng }) => {
         </div>
       </div>
     );
-  else return "<>";
+  else return "CONNECTEZ VOUS POUR COMMENCER";
 };
 
 export default WhiteboardList;
