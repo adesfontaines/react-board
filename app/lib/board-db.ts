@@ -18,7 +18,7 @@ export async function getBoards(filter: BoardFilter) {
         const limit = filter.limit ?? 10;
         const skip = (page - 1) * limit;
 
-        const boards = await Board.find({ ownerId: filter.ownerId }).skip(skip).limit(limit).lean().exec();
+        const boards = await Board.find({ ownerId: filter.ownerId }).skip(skip).limit(limit).sort({ lastModifiedTime: - 1 }).lean().exec();
 
         const results = boards.length;
 
@@ -55,7 +55,6 @@ export async function getBoard(id: string) {
         if (!parsedId) {
             return { error: "Board not found" };
         }
-        // console.log(session);
         const board = await Board.findById(parsedId).lean().exec();
         if (board) {
             return {
