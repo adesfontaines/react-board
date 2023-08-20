@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import { signIn } from "next-auth/react";
-import Image from "next/image";
+import { useTranslation } from "@/app/i18n/client";
 import "../../globals.css";
-import { useTranslation } from "react-i18next";
+import SocialLoginButton from "@/app/components/socialLoginButton";
 
 export default function SignIn({ params, searchParams }) {
   const { t } = useTranslation(params.lng, "common");
@@ -10,58 +10,38 @@ export default function SignIn({ params, searchParams }) {
   return (
     <div className="flex h-full items-center justify-center  md:bg-gradient-to-b from-indigo-200 via-red-200 to-yellow-100 text-black md:flex-row md:justify-end">
       <div className="hidden h-max justify-center p-10 text-white md:block md:w-1/2">
-        <h1 className="mb-4 text-4xl font-semibold">Hello again</h1>
+        <h1 className="mb-4 text-4xl font-semibold">Welcome back !</h1>
         <p className="text-lg">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Please connect to access to all functionnalities
         </p>
       </div>
       <div className="h-full flex items-center justify-center bg-white p-6 md:w-1/2">
         <div className="max-w-xs">
           <h2 className="mb-4 text-2xl font-semibold">{t("signInTitle")}</h2>
           <div className="mb-4 text-white">
-            <button
-              onClick={() =>
-                signIn("google", { callbackUrl: "/" + params.lng })
-              }
-              className="mb-2 shadow w-full flex rounded-lg items-center justify-center text-black bg-white px-4 py-2"
-            >
-              <Image
-                className="pr-2"
-                src="https://authjs.dev/img/providers/google.svg"
-                alt="google icon"
-                width={32}
-                height={32}
-              />
-              <span className="w-full">{t("logInGoogle")}</span>
-            </button>
-            <button
-              onClick={() =>
-                signIn("linkedin", { callbackUrl: "/" + params.lng })
-              }
-              className="mb-2 shadow w-full flex rounded-lg items-center justify-center text-white hover:brightness-70 bg-[#006699] px-4 py-2"
-            >
-              <Image
-                className="pr-1"
-                src="https://authjs.dev/img/providers/linkedin.svg"
-                alt="line icon"
-                width={32}
-                height={32}
-              />
-              <span className="w-full">{t("logInLinkedIn")}</span>
-            </button>
-            <button
-              onClick={() => signIn("line", { callbackUrl: "/" + params.lng })}
-              className="mb-2 shadow w-full flex rounded-lg items-center justify-center text-white bg-[#01c300] px-4 py-2"
-            >
-              <Image
-                className="pr-1"
-                src="https://authjs.dev/img/providers/line.svg"
-                alt="line icon"
-                width={32}
-                height={32}
-              />
-              <span className="w-full">{t("logInLine")}</span>
-            </button>
+            <SocialLoginButton
+              t={t}
+              logo="google"
+              lng={params.lng}
+              provider="Google"
+              providerClass="bg-white"
+            />
+
+            <SocialLoginButton
+              t={t}
+              logo="facebook-dark"
+              lng={params.lng}
+              provider="Facebook"
+              providerClass="hover:brightness-70 bg-[#016aff] text-white"
+            />
+
+            <SocialLoginButton
+              t={t}
+              logo="line"
+              lng={params.lng}
+              provider="Line"
+              providerClass="bg-[#01c300] text-white"
+            />
           </div>
           <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
