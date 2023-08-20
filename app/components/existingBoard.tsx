@@ -15,7 +15,7 @@ const ExistingBoard: React.FC<{
   const { t } = useTranslation(lng, "common");
 
   return (
-    <Link href={lng + "/whiteboards/" + board.id}>
+    <Link href={"/whiteboards/" + board.id} locale={lng}>
       <div className="shadow-md rounded-lg hover:ring-4 w-60 h-44 bg-white text-black flex flex-col font-semibold relative">
         <div className="rounded-t w-full bg-gray-300 h-40" />
         <div className="p-2 shadow-inner">

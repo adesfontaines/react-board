@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-  },
   images: {
     remotePatterns: [
       {
@@ -13,7 +11,16 @@ const nextConfig = {
   experimental: {
     serverActions: true,
     serverComponentsExternalPackages:['mongoose','@typegoose/typegoose']
-}
+  },
+  webpack: (config) => {
+    config.resolve = {
+      ...config.resolve,
+      fallback: {
+        fs: false,
+      },
+    };
+    return config;
+  }
   };
   
   module.exports = nextConfig;

@@ -136,7 +136,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
       case Tools.Highlighter:
         let lastLine = forms[forms.length - 1];
 
-        if (!lastLine) return;
+        if (!isDrawing.current) return;
 
         const pointer = getTruePointer();
 

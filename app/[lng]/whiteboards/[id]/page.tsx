@@ -75,11 +75,11 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
           childleft={
             <div className="flex items-center">
               <div className="ml-2 p-2 rounded hover:bg-sky-600">
-                <Link href="/">
+                <Link href="/" locale={lng}>
                   <PiHouse size={24} />
                 </Link>
               </div>
-              <Link href={"/" + lng}>
+              <Link href={"/"} locale={lng}>
                 <h2>Whiteboard</h2>
               </Link>
               <button

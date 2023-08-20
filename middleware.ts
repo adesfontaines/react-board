@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import acceptLanguage from "accept-language";
 import { fallbackLng, locales } from "./app/i18n/settings";
-
+import withAuth from "next-auth/middleware"
 acceptLanguage.languages(locales);
 
 export const config = {
@@ -11,8 +11,9 @@ export const config = {
 
 const cookieName = "i18next";
 
-export function middleware(req: NextRequest) {
+export default async function middleware(req: NextRequest, event: NextFetchEvent) {
   let lng: string | null | undefined;
+
   if (req.cookies.has(cookieName)) {
     lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
   }
@@ -22,6 +23,18 @@ export function middleware(req: NextRequest) {
   if (!lng) {
     lng = fallbackLng;
   }
+
+  const withAuthMiddleware = withAuth({
+    callbacks: {
+      authorized: ({ req, token }: any) => {
+        const tokenValue = req.cookies.get("next-auth.session-token")?.value
+        return tokenValue
+      }
+    },
+    pages: {
+      signIn: `/${lng}/signin`,
+    },
+  });
 
   // Redirect if lng in path is not supported
   if (
@@ -45,5 +58,5 @@ export function middleware(req: NextRequest) {
     return response;
   }
 
-  return NextResponse.next();
+  return await withAuthMiddleware(req, event);
 }
