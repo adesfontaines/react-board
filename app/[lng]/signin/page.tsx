@@ -4,7 +4,7 @@ import { useTranslation } from "@/app/i18n/client";
 import "../../globals.css";
 import SocialLoginButton from "@/app/components/socialLoginButton";
 
-export default function SignIn({ params, searchParams }) {
+export default function SignIn({ params }: { params: any }) {
   const { t } = useTranslation(params.lng, "common");
 
   return (
@@ -65,7 +65,7 @@ export default function SignIn({ params, searchParams }) {
             </button>
           </div>
           <p className="mt-4 text-gray-600">
-            Don't have an account ?&nbsp;
+            Dont have an account ?&nbsp;
             <a href="#" className="text-blue-500">
               Sign Up
             </a>

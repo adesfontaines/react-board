@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "./popOver";
 import ProfileActions from "./profileActions";
-import { getServerSession } from "../api/auth/[...nextauth]/route";
+import { getServerSession } from "../api/auth/[...nextauth]/session";
 
 const NavigationBar: React.FC<{
   lng: string;

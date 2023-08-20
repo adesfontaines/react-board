@@ -7,6 +7,12 @@ export default function SocialLoginButton({
   provider,
   providerClass,
   logo,
+}: {
+  t: any;
+  lng: string;
+  provider: string;
+  providerClass: string;
+  logo: string;
 }) {
   return (
     <button
