@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useSession } from "next-auth/react";
 import { Board } from "../models/board";
 import connectDB from "./mongoose";
 import { stringToObjectId } from "./utils";

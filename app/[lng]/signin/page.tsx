@@ -3,20 +3,41 @@
 import { useTranslation } from "@/app/i18n/client";
 import "../../globals.css";
 import SocialLoginButton from "@/app/components/socialLoginButton";
+import { useSearchParams } from "next/navigation";
 
 export default function SignIn({ params }: { params: any }) {
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
+
   const { t } = useTranslation(params.lng, "common");
 
+  const translateError = (error: string | null) => {
+    if (!error) return "";
+
+    return (
+      <div
+        className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4"
+        role="alert"
+      >
+        <p className="font-bold">Sign in</p>
+        <p>
+          To confirm your identity, sign in with the same account you used
+          orignally{error}
+        </p>
+      </div>
+    );
+  };
   return (
     <div className="flex h-full items-center justify-center  md:bg-gradient-to-b from-indigo-200 via-red-200 to-yellow-100 text-black md:flex-row md:justify-end">
       <div className="hidden h-max justify-center p-10 text-white md:block md:w-1/2">
-        <h1 className="mb-4 text-4xl font-semibold">Welcome back !</h1>
+        <h1 className="mb-4 text-4xl font-semibold">{t("welcome")}</h1>
         <p className="text-lg">
           Please connect to access to all functionnalities
         </p>
       </div>
       <div className="h-full flex items-center justify-center bg-white p-6 md:w-1/2">
         <div className="max-w-xs">
+          {translateError(error)}
           <h2 className="mb-4 text-2xl font-semibold">{t("signInTitle")}</h2>
           <div className="mb-4 text-white">
             <SocialLoginButton
