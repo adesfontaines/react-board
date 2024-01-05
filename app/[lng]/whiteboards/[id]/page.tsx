@@ -38,6 +38,16 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
   const { t } = useTranslation(lng, "common");
 
   useEffect(() => {
+    async function saveBoard(): Promise<void> {
+      if (!board) return;
+
+      const updatedBoard = board;
+      updatedBoard.drawings = forms!;
+      setBoard(updatedBoard);
+      setIsEdited(false);
+      await updateBoardAction(updatedBoard._id.toString(), board, "/");
+    }
+
     getBoardByIdAction({ ownerId: "", id: id, path: "/" }).then((data) => {
       if (data.board && !data.error) {
         setBoard(data.board);
@@ -48,7 +58,7 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
 
     const timer = setTimeout(() => isEdited && saveBoard(), 10000);
     return () => clearTimeout(timer);
-  }, [id, isEdited]);
+  }, [board, forms, id, isEdited]);
 
   const updateScale = (newScale: number) => {
     if (drawingZoneRef.current) {
@@ -56,48 +66,10 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
     }
   };
 
-  async function saveBoard(): Promise<void> {
-    if (!board) return;
-
-    const updatedBoard = board;
-    updatedBoard.drawings = forms!;
-    setBoard(updatedBoard);
-    setIsEdited(false);
-    await updateBoardAction(updatedBoard._id.toString(), board, "/");
-  }
-
   if (forms)
     return (
       <main className="flex min-h-screen flex-col items-center justify-between">
         <DrawingCursor tool={selectedTool} color={currentColor}></DrawingCursor>
-        <NavigationBar
-          lng={lng}
-          childleft={
-            <div className="flex items-center">
-              <div className="ml-2 p-2 rounded hover:bg-sky-600">
-                <Link href="/" locale={lng}>
-                  <PiHouse size={24} />
-                </Link>
-              </div>
-              <Link href={"/"} locale={lng}>
-                <h2>Whiteboard</h2>
-              </Link>
-              <button
-                onClick={() => drawingZoneRef.current.exportCanvas()}
-                className="ml-2 p-2 rounded hover:bg-sky-600"
-              >
-                <PiUpload size={24} />
-              </button>
-              <div className="ml-2 p-2">
-                {isEdited ? (
-                  <PiCloudArrowUp size={24} />
-                ) : (
-                  <PiCloudCheck size={24} />
-                )}
-              </div>
-            </div>
-          }
-        ></NavigationBar>
         <Canvas
           historyIndex={historyIndex}
           setHistoryIndex={setHistoryIndex}

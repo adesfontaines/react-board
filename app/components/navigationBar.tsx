@@ -3,15 +3,15 @@ import React from "react";
 import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "./popOver";
 import ProfileActions from "./profileActions";
-import { getServerSession } from "../api/auth/[...nextauth]/session";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
 const NavigationBar: React.FC<{
   lng: string;
   childleft?: any;
   childright?: any;
 }> = async ({ lng, childleft, childright }) => {
-  const session = await getServerSession();
-
+  const session: any = await getServerSession(authOptions);
   return (
     <div className="z-10 top-0 left-0 w-full h-12 shadow-md flex justify-between bg-stone-700 text-white">
       <div className="flex items-center ml-2">{childleft}</div>
@@ -26,7 +26,7 @@ const NavigationBar: React.FC<{
                 className="rounded-full"
                 width={32}
                 height={32}
-                src={session.user.image!}
+                src={session!.user.image!}
               />
             </div>
           </PopoverTrigger>
@@ -38,12 +38,12 @@ const NavigationBar: React.FC<{
                   className="rounded-full"
                   width={48}
                   height={48}
-                  src={session.user.image!}
+                  src={session?.user.image!}
                 />
               </div>
               <div className="ml-4">
-                <h2 className="text-lg font-semibold">{session.user.name}</h2>
-                <p className="text-xs text-gray-500">{session.user?.email}</p>
+                <h2 className="text-lg font-semibold">{session!.user.name}</h2>
+                <p className="text-xs text-gray-500">{session!.user?.email}</p>
               </div>
             </div>
             <ProfileActions lng={lng} />

@@ -19,6 +19,11 @@ const nextConfig = {
         fs: false,
       },
     };
+
+    // Add canvas to webpack externals
+    config.externals = config.externals || {};
+    config.externals.canvas = {};
+
     return config;
   }
   };

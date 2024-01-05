@@ -1,7 +1,7 @@
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import acceptLanguage from "accept-language";
 import { fallbackLng, locales } from "./app/i18n/settings";
-import withAuth from "next-auth/middleware"
+import { withAuth, NextRequestWithAuth } from "next-auth/middleware"
 acceptLanguage.languages(locales);
 
 export const config = {
@@ -11,7 +11,7 @@ export const config = {
 
 const cookieName = "i18next";
 
-export default async function middleware(req: NextRequest, event: NextFetchEvent) {
+export default async function middleware(req: NextRequestWithAuth, event: NextFetchEvent) {
   let lng: string | null | undefined;
 
   if (req.cookies.has(cookieName)) {
