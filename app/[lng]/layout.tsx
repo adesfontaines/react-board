@@ -1,15 +1,17 @@
 import "../globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { locales } from "../i18n/settings";
 import { dir } from "i18next";
 import { NextAuthProvider } from "../providers/nextAuthProvider";
+import Link from "next/link";
+import { ImGithub } from "react-icons/im";
+import NavigationBar from "../components/navigationBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Whiteboard App",
-  description: "React whiteboard app made by Antonin Desfontaines",
+  title: "Whiteboard",
+  description: "Next.js whiteboard app made by Antonin Desfontaines",
 };
 
 export default function RootLayout({
