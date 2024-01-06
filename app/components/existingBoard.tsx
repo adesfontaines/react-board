@@ -23,7 +23,7 @@ const ExistingBoard: React.FC<{
             {board.title == "Untitled" ? t("untitled") : board.title}
           </h3>
           <p className="text-xs text-gray-600">
-            Edited: {board.lastModifiedTime.toLocaleString(lng)}
+            {t("editedDate") + board.lastModifiedTime.toLocaleString(lng)}
           </p>
         </div>
         <div

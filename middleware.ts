@@ -9,10 +9,11 @@ export const config = {
   matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)"],
 };
 
-const cookieName = "i18next";
+const cookieName = "locale";
 
 export default async function middleware(req: NextRequestWithAuth, event: NextFetchEvent) {
   let lng: string | null | undefined;
+
 
   if (req.cookies.has(cookieName)) {
     lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
@@ -46,7 +47,7 @@ export default async function middleware(req: NextRequestWithAuth, event: NextFe
     );
   }
 
-  if (req.headers.has("referer")) {
+  if (!lng && req.headers.has("referer")) {
     const refererUrl = new URL(req.headers.get("referer")!);
     const lngInReferer = locales.find((l) =>
       refererUrl.pathname.startsWith(`/${l}`)
