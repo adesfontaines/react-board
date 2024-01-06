@@ -23,7 +23,7 @@ export default function SignIn({ params }: { params: any }) {
         <p className="font-bold">Sign in</p>
         <p>
           To confirm your identity, sign in with the same account you used
-          orignally{error}
+          orignally
         </p>
       </div>
     );
