@@ -15,7 +15,7 @@ const NavigationBar: React.FC<{
   if (!session) return "";
   console.log(session);
   return (
-    <div className="z-10 top-0 left-0 w-full h-12 shadow-md flex justify-between bg-stone-700 text-white">
+    <div className="absolute z-10 top-0 left-0 w-full h-12 shadow-md flex justify-between bg-stone-700 text-white">
       <div className="flex items-center ml-2">{childleft}</div>
       <div className="float-right items-center flex">
         {childright}

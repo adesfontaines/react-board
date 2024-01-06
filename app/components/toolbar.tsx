@@ -67,8 +67,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
     "#FF5370",
   ];
 
+  const disabledButtonClassname = "rounded p-1 m-1 opacity-50";
   const defaultButtonClassname =
-    "cursor-pointer hover:bg-stone-200 rounded p-1 m-1 disabled:opacity-50";
+    "cursor-pointer hover:bg-stone-200 rounded p-1 m-1";
   const selectedToolClassname =
     "cursor-pointer bg-stone-200 rounded p-1 m-1 border-black";
 
@@ -278,8 +279,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Tooltip>
           <TooltipTrigger
             disabled={historyIndex <= 0}
-            onClick={() => handleUndo()}
-            className={defaultButtonClassname}
+            onClick={() => historyIndex > 0 && handleUndo()}
+            className={
+              historyIndex > 0
+                ? defaultButtonClassname
+                : disabledButtonClassname
+            }
           >
             <LuUndo size={28}></LuUndo>
           </TooltipTrigger>
@@ -288,8 +293,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Tooltip>
           <TooltipTrigger
             disabled={historyIndex >= maxHistory}
-            onClick={() => handleRedo()}
-            className={defaultButtonClassname}
+            onClick={() => historyIndex < maxHistory && handleRedo()}
+            className={
+              historyIndex < maxHistory
+                ? defaultButtonClassname
+                : disabledButtonClassname
+            }
           >
             <LuRedo size={28}></LuRedo>
           </TooltipTrigger>

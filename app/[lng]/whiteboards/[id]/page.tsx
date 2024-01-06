@@ -16,6 +16,7 @@ import dynamic from "next/dynamic";
 import DrawingCursor from "@/app/components/drawingCursor";
 import { getBoardByIdAction, updateBoardAction } from "@/app/_action";
 import { BoardClass } from "@/app/models/board";
+import { ImGithub } from "react-icons/im";
 
 const Canvas = dynamic(() => import("../../../components/wrappedCanvas"), {
   ssr: false,
@@ -38,6 +39,20 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
   const { t } = useTranslation(lng, "common");
 
   useEffect(() => {
+    // Function to handle board initialization and other logic
+    async function initializeBoard(): Promise<void> {
+      getBoardByIdAction({ ownerId: "", id: id, path: "/" }).then((data) => {
+        if (data.board && !data.error) {
+          const sanitizedBoard = {
+            ...data.board,
+          };
+
+          setBoard(sanitizedBoard);
+          setForms(data.board.drawings);
+          setHistoryIndex(data.board.drawings.length);
+        }
+      });
+    }
     async function saveBoard(): Promise<void> {
       if (!board) return;
 
@@ -48,17 +63,10 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
       await updateBoardAction(updatedBoard._id.toString(), board, "/");
     }
 
-    getBoardByIdAction({ ownerId: "", id: id, path: "/" }).then((data) => {
-      if (data.board && !data.error) {
-        setBoard(data.board);
-        setForms(data.board.drawings);
-        setHistoryIndex(data.board.drawings.length);
-      }
-    });
+    if (board == null) initializeBoard();
 
-    const timer = setTimeout(() => isEdited && saveBoard(), 10000);
-    return () => clearTimeout(timer);
-  }, [board, forms, id, isEdited]);
+    if (isEdited) saveBoard();
+  }, [isEdited]);
 
   const updateScale = (newScale: number) => {
     if (drawingZoneRef.current) {
