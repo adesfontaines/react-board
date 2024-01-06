@@ -32,7 +32,27 @@ export default function RootLayout({
           />
           <title>WhiteboardCanvas</title>
         </head>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <NavigationBar
+            childleft={
+              <Link href={"/"} locale={lng}>
+                <h2>Whiteboard</h2>
+              </Link>
+            }
+            lng={lng}
+            childright={
+              <a
+                href="https://github.com/adesfontaines/react-board"
+                target="_blank"
+                className="flex text-white px-3 py-3 hover:bg-stone-800"
+              >
+                <ImGithub className="mr-2" size={24} />
+                GitHub
+              </a>
+            }
+          ></NavigationBar>
+          {children}
+        </body>
       </html>
     </NextAuthProvider>
   );
