@@ -16,6 +16,7 @@ const LocalePicker: React.FC<{ lng: string }> = ({ lng }) => {
       <select
         onChange={(event) => {
           updateLocaleCookie(event.target.value);
+          i18next.changeLanguage(event.target.value);
           router.push("/" + event.target.value);
         }}
         id="countries"

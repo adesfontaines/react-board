@@ -5,18 +5,24 @@ export default function SocialLoginButton({
   t,
   lng,
   provider,
+  callbackUrl,
   providerClass,
   logo,
 }: {
   t: any;
   lng: string;
   provider: string;
+  callbackUrl: string;
   providerClass: string;
   logo: string;
 }) {
   return (
     <button
-      onClick={() => signIn(provider.toLowerCase(), { callbackUrl: "/" + lng })}
+      onClick={() =>
+        signIn(provider.toLowerCase(), {
+          callbackUrl: callbackUrl ? callbackUrl : "/",
+        })
+      }
       className={
         providerClass +
         " mb-2 shadow w-full flex items-center justify-center text-black px-4 py-2"

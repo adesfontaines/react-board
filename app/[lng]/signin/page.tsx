@@ -45,6 +45,7 @@ export default function SignIn({ params }: { params: any }) {
               t={t}
               logo="google"
               lng={params.lng}
+              callbackUrl={params.callback}
               provider="Google"
               providerClass="bg-white"
             />
@@ -53,6 +54,7 @@ export default function SignIn({ params }: { params: any }) {
               t={t}
               logo="twitter"
               lng={params.lng}
+              callbackUrl={params.callback}
               provider="Twitter"
               providerClass="hover:brightness-70 bg-[#1DA1F2] text-white"
             />
@@ -61,6 +63,7 @@ export default function SignIn({ params }: { params: any }) {
               t={t}
               logo="github"
               lng={params.lng}
+              callbackUrl={params.callback}
               provider="GitHub"
               providerClass="hover:brightness-70 bg-[#171515] text-white"
             />
@@ -69,6 +72,7 @@ export default function SignIn({ params }: { params: any }) {
               t={t}
               logo="line"
               lng={params.lng}
+              callbackUrl={params.callback}
               provider="Line"
               providerClass="bg-[#01c300] text-white"
             />

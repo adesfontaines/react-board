@@ -33,7 +33,7 @@ export default async function middleware(req: NextRequestWithAuth, event: NextFe
       }
     },
     pages: {
-      signIn: `/${lng}/signin`,
+      signIn: `/en/signin`,
     },
   });
 
