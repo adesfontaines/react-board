@@ -4,6 +4,7 @@ import { useTranslation } from "@/app/i18n/client";
 import "../../globals.css";
 import SocialLoginButton from "@/app/components/socialLoginButton";
 import { useSearchParams } from "next/navigation";
+import LocalePicker from "@/app/components/localePicker";
 
 export default function SignIn({ params }: { params: any }) {
   const searchParams = useSearchParams();
@@ -50,10 +51,18 @@ export default function SignIn({ params }: { params: any }) {
 
             <SocialLoginButton
               t={t}
-              logo="facebook-dark"
+              logo="twitter"
               lng={params.lng}
-              provider="Facebook"
-              providerClass="hover:brightness-70 bg-[#016aff] text-white"
+              provider="Twitter"
+              providerClass="hover:brightness-70 bg-[#1DA1F2] text-white"
+            />
+
+            <SocialLoginButton
+              t={t}
+              logo="github"
+              lng={params.lng}
+              provider="GitHub"
+              providerClass="hover:brightness-70 bg-[#171515] text-white"
             />
 
             <SocialLoginButton
@@ -72,16 +81,21 @@ export default function SignIn({ params }: { params: any }) {
           </div>
           <div>
             <input
+              disabled
               type="email"
               placeholder={t("email")}
               className="mb-2 w-full rounded-lg border px-4 py-2"
             />
             <input
+              disabled
               type="password"
               placeholder={t("password")}
               className="mb-4 w-full rounded-lg border px-4 py-2"
             />
-            <button className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white">
+            <button
+              disabled
+              className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white"
+            >
               {t("signIn")}
             </button>
           </div>
@@ -93,6 +107,7 @@ export default function SignIn({ params }: { params: any }) {
           </p>
         </div>
       </div>
+      <LocalePicker lng={params.lng} />
     </div>
   );
 }

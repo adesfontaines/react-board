@@ -20,6 +20,8 @@
     "logInLinkedIn": "Log in with LinkedIn",
     "logInLine": "Log in with LINE",
     "logInFacebook": "Log in with Facebook",
+    "logInGitHub": "Log in with GitHub",
+    "logInTwitter": "Log in with X (Twitter)",
     "email": "Email",
     "welcome": " Welcome back !",
     "password": "Password",

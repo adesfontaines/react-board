@@ -12,6 +12,8 @@ const NavigationBar: React.FC<{
   childright?: any;
 }> = async ({ lng, childleft, childright }) => {
   const session: any = await getServerSession(authOptions);
+  if (!session) return "";
+  console.log(session);
   return (
     <div className="z-10 top-0 left-0 w-full h-12 shadow-md flex justify-between bg-stone-700 text-white">
       <div className="flex items-center ml-2">{childleft}</div>
@@ -31,7 +33,7 @@ const NavigationBar: React.FC<{
             </div>
           </PopoverTrigger>
           <PopoverContent className="Popover flex w-auto flex-col divide-y-2 rounded-lg bg-white shadow-md text-black">
-            <div className="flex p-3 w-40">
+            <div className="flex p-3 w-auto">
               <div className="flex h-12 w-12 items-center justify-center rounded-full">
                 <Image
                   alt="profil pic"

@@ -17,6 +17,8 @@
     "logInLinkedIn": "LinkedInでログイン",
     "logInLine": "LINEでログイン",
     "logInFacebook": "Facebookでログイン",
+    "logInGitHub": "GitHubでログイン",
+    "logInTwitter": "Twitterでログイン",
     "email": "メールアドレス",
     "password": "パスワード",
     "settings": "設定",

@@ -19,7 +19,7 @@ export default function SocialLoginButton({
       onClick={() => signIn(provider.toLowerCase(), { callbackUrl: "/" + lng })}
       className={
         providerClass +
-        " mb-2 shadow w-full flex rounded-lg items-center justify-center text-black px-4 py-2"
+        " mb-2 shadow w-full flex items-center justify-center text-black px-4 py-2"
       }
     >
       <Image
