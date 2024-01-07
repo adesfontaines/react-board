@@ -20,7 +20,7 @@ export default function SignIn({ params }: { params: any }) {
         className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4"
         role="alert"
       >
-        <p className="font-bold">Sign in</p>
+        <p className="font-bold">{t("signIn")}</p>
         <p>
           To confirm your identity, sign in with the same account you used
           orignally
@@ -32,9 +32,7 @@ export default function SignIn({ params }: { params: any }) {
     <div className="flex h-full items-center justify-center  md:bg-gradient-to-b from-indigo-200 via-red-200 to-yellow-100 text-black md:flex-row md:justify-end">
       <div className="hidden h-max justify-center p-10 text-white md:block md:w-1/2">
         <h1 className="mb-4 text-4xl font-semibold">{t("welcome")}</h1>
-        <p className="text-lg">
-          Please connect to access to all functionnalities
-        </p>
+        <p className="text-lg">{t("welcomeDescription")}</p>
       </div>
       <div className="h-full flex items-center justify-center bg-white p-6 md:w-1/2">
         <div className="max-w-xs">
@@ -104,9 +102,9 @@ export default function SignIn({ params }: { params: any }) {
             </button>
           </div>
           <p className="mt-4 text-gray-600">
-            Dont have an account ?&nbsp;
+            {t("signUpDescription")}&nbsp;
             <a href="#" className="text-blue-500">
-              Sign Up
+              {t("signUp")}
             </a>
           </p>
         </div>
