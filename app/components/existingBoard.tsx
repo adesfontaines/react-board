@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useContext } from "react";
-import Link from "next/link";
+import React from "react";
+import { Link } from "nextjs13-progress";
 import { Popover, PopoverContent, PopoverTrigger } from "./popOver";
 import { PiDotsThreeBold, PiTrash, PiPencil } from "react-icons/pi";
 import { BoardClass } from "../models/board";
@@ -16,7 +16,7 @@ const ExistingBoard: React.FC<{
 
   return (
     <Link href={"/whiteboards/" + board.id} locale={lng}>
-      <div className="shadow-md rounded-lg hover:ring-4 w-60 h-44 bg-white text-black flex flex-col font-semibold relative">
+      <div className="shadow-md rounded hover:ring-4 w-60 h-44 bg-white text-black flex flex-col font-semibold relative">
         <div className="rounded-t w-full bg-gray-300 h-40" />
         <div className="p-2 shadow-inner">
           <h3 className="text-sm">

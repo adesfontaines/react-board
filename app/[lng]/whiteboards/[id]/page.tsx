@@ -1,22 +1,14 @@
 "use client";
-import NavigationBar from "../../../components/navigationBar";
 import React, { useEffect, useRef } from "react";
 import { Tools } from "../../../enums/tools";
 import ZoomBar from "../../../components/zoomBar";
 import ToolbarBase from "@/app/components/toolbar";
 import { useTranslation } from "@/app/i18n/client";
-import {
-  PiCloudArrowUp,
-  PiHouse,
-  PiUpload,
-  PiCloudCheck,
-} from "react-icons/pi";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import DrawingCursor from "@/app/components/drawingCursor";
 import { getBoardByIdAction, updateBoardAction } from "@/app/_action";
 import { BoardClass } from "@/app/models/board";
-import { ImGithub } from "react-icons/im";
+import { useRouter } from "next/navigation";
 
 const Canvas = dynamic(() => import("../../../components/wrappedCanvas"), {
   ssr: false,
@@ -37,6 +29,7 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
   const drawingZoneRef = useRef<any>(null);
 
   const { t } = useTranslation(lng, "common");
+  const router = useRouter();
 
   useEffect(() => {
     // Function to handle board initialization and other logic
@@ -50,6 +43,8 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
           setBoard(sanitizedBoard);
           setForms(data.board.drawings);
           setHistoryIndex(data.board.drawings.length);
+        } else {
+          router.push("/");
         }
       });
     }

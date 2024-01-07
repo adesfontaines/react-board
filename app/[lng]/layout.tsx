@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { dir } from "i18next";
 import { NextAuthProvider } from "../providers/nextAuthProvider";
-import Link from "next/link";
 import { ImGithub } from "react-icons/im";
 import NavigationBar from "../components/navigationBar";
+import { Next13NProgress, Link } from "nextjs13-progress";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -52,6 +52,7 @@ export default function RootLayout({
             }
           ></NavigationBar>
           {children}
+          <Next13NProgress color="#5796fa" height={3} />
         </body>
       </html>
     </NextAuthProvider>
