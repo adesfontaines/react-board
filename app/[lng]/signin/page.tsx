@@ -3,7 +3,7 @@
 import { useTranslation } from "@/app/i18n/client";
 import "../../globals.css";
 import SocialLoginButton from "@/app/components/socialLoginButton";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import LocalePicker from "@/app/components/localePicker";
 import { useSession } from "next-auth/react";
 
@@ -14,6 +14,9 @@ export default function SignIn({ params }: { params: any }) {
 
   const { t } = useTranslation(params.lng, "common");
 
+  if (status == "authenticated") {
+    return redirect("/" + params.lng);
+  }
   const translateError = (error: string | null) => {
     if (!error) return "";
 

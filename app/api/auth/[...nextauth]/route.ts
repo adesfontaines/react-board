@@ -32,10 +32,7 @@ export const authOptions: any = {
             clientId: process.env.GH_CLIENT_ID!,
             clientSecret: process.env.GH_CLIENT_SECRET!
         }),
-    ],
-    pages: {
-        signIn: `/en/signin`,
-    }
+    ]
 }
 const handler = NextAuth(authOptions)
 
