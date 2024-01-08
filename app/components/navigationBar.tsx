@@ -31,7 +31,7 @@ const NavigationBar: React.FC<{
               />
             </div>
           </PopoverTrigger>
-          <PopoverContent className="Popover flex w-auto flex-col divide-y-2 rounded-lg bg-white shadow-md text-black">
+          <PopoverContent className="Popover flex w-auto flex-col min-w-52 divide-y-2 rounded-lg bg-white shadow-md text-black">
             <div className="flex p-3 w-auto">
               <div className="flex h-12 w-12 items-center justify-center rounded-full">
                 <Image

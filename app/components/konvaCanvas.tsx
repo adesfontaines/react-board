@@ -143,6 +143,12 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
     }
     isDrawing.current = false;
   };
+  const handleMouseOut = () => {
+    if (isDrawing.current) {
+      setIsEdited(true);
+    }
+    isDrawing.current = false;
+  };
   const handleMouseWheel = (event: {
     target: { getStage: () => any };
     evt: { deltaY: number };
@@ -199,6 +205,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseOut}
       onWheel={handleMouseWheel}
       className={
         cursorStyle() +

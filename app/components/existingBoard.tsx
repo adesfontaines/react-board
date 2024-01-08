@@ -21,7 +21,7 @@ const ExistingBoard: React.FC<{
         <Image
           alt="thumbnail"
           priority={true}
-          className="object-contain rounded-t w-full bg-gray-300 h-32"
+          className="object-contain rounded-t w-full bg-trueGray-200 h-[7.5rem]"
           width={240}
           height={124}
           src={"data:image/png;base64," + board.thumbnail}
@@ -31,7 +31,7 @@ const ExistingBoard: React.FC<{
             {board.title == "Untitled" ? t("untitled") : board.title}
           </h3>
           <p className="text-xs text-gray-600">
-            {t("editedDate") + board.lastModifiedTime.toLocaleString(lng)}
+            {t("editedDate") + " " + board.lastModifiedTime.toLocaleString(lng)}
           </p>
         </div>
         <div
