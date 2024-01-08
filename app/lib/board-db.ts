@@ -72,7 +72,7 @@ export async function getBoard(id: string) {
 export async function updateBoard(
     id: string,
     { title, drawings }: { title?: string; drawings?: any[] },
-    thumbnail: Buffer
+    thumbnail?: Buffer
 ) {
     try {
         await connectDB();
