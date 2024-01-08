@@ -5,7 +5,6 @@ import { withAuth, NextRequestWithAuth } from "next-auth/middleware"
 acceptLanguage.languages(locales);
 
 export const config = {
-  // matcher: '/:lng*'
   matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)"],
 };
 
@@ -13,7 +12,6 @@ const cookieName = "locale";
 
 export default async function middleware(req: NextRequestWithAuth, event: NextFetchEvent) {
   let lng: string | null | undefined;
-
 
   if (req.cookies.has(cookieName)) {
     lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
@@ -29,11 +27,12 @@ export default async function middleware(req: NextRequestWithAuth, event: NextFe
     callbacks: {
       authorized: ({ req, token }: any) => {
         const tokenValue = req.cookies.get("next-auth.session-token")?.value
+        console.log(tokenValue);
         return tokenValue
       }
     },
     pages: {
-      signIn: `/en/signin`,
+      signIn: `/${lng}/signin`,
     },
   });
 
@@ -42,6 +41,7 @@ export default async function middleware(req: NextRequestWithAuth, event: NextFe
     !locales.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`)) &&
     !req.nextUrl.pathname.startsWith("/_next")
   ) {
+    console.log(req);
     return NextResponse.redirect(
       new URL(`/${lng}${req.nextUrl.pathname}`, req.url)
     );

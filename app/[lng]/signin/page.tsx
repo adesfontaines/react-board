@@ -5,10 +5,12 @@ import "../../globals.css";
 import SocialLoginButton from "@/app/components/socialLoginButton";
 import { useSearchParams } from "next/navigation";
 import LocalePicker from "@/app/components/localePicker";
+import { useSession } from "next-auth/react";
 
 export default function SignIn({ params }: { params: any }) {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
+  const { status } = useSession();
 
   const { t } = useTranslation(params.lng, "common");
 
@@ -100,6 +102,7 @@ export default function SignIn({ params }: { params: any }) {
             >
               {t("signIn")}
             </button>
+            {status}
           </div>
           <p className="mt-4 text-gray-600">
             {t("signUpDescription")}&nbsp;
