@@ -71,7 +71,8 @@ export async function getBoard(id: string) {
 
 export async function updateBoard(
     id: string,
-    { title, drawings, thumbnail }: { title?: string; drawings?: any[], thumbnail: Buffer }
+    { title, drawings }: { title?: string; drawings?: any[] },
+    thumbnail: Buffer
 ) {
     try {
         await connectDB();

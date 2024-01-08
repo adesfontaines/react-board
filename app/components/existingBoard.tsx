@@ -2,12 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
-import { Link } from "nextjs13-progress";
 import { Popover, PopoverContent, PopoverTrigger } from "./popOver";
 import { PiDotsThreeBold, PiTrash, PiPencil } from "react-icons/pi";
 import { BoardClass } from "../models/board";
 import { deleteBoardAction } from "../_action";
 import { useTranslation } from "../i18n/client";
+import Link from "next/link";
 
 const ExistingBoard: React.FC<{
   lng: string;

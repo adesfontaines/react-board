@@ -34,7 +34,7 @@
     "next": "^13.4.13",
     "next-auth": "^4.24.5",
     "next-i18next": "^14.0.0",
-    "nextjs13-progress": "^1.2.1",
+    "nextjs-toploader": "^1.6.4",
     "postcss": "^8.4.33",
     "react": "18.2.0",
     "react-dom": "18.2.0",

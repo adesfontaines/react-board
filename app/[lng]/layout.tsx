@@ -5,8 +5,8 @@ import { dir } from "i18next";
 import { NextAuthProvider } from "../providers/nextAuthProvider";
 import { ImGithub } from "react-icons/im";
 import NavigationBar from "../components/navigationBar";
-import { Next13NProgress, Link } from "nextjs13-progress";
-
+import NextTopLoader from "nextjs-toploader";
+import Link from "next/link";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -51,8 +51,18 @@ export default function RootLayout({
               </a>
             }
           ></NavigationBar>
+          <NextTopLoader
+            color="#5796fa"
+            initialPosition={0.08}
+            crawlSpeed={200}
+            height={3}
+            crawl={true}
+            showSpinner={true}
+            easing="ease"
+            speed={200}
+            shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+          />
           {children}
-          <Next13NProgress color="#5796fa" height={3} />
         </body>
       </html>
     </NextAuthProvider>
