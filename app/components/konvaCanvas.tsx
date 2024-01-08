@@ -46,8 +46,9 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
   const isDrawing = React.useRef(false);
 
   useImperativeHandle(ref, () => ({
-    exportCanvas: () => {
-      exportCanvas();
+    getCanvasURL: () => {
+      const stage = canvasRef.current!;
+      return stage.toDataURL({ pixelRatio: 1 / 3 });
     },
     updateScale: (newScale: number) => {
       const stage = canvasRef.current;
@@ -69,21 +70,6 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
       stage.position(newPos);
     },
   }));
-
-  const exportCanvas = () => {
-    const stage = canvasRef.current;
-
-    if (!stage) return;
-
-    const uri = stage.toDataURL();
-
-    var link = document.createElement("a");
-    link.download = "canva_export.jpg";
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   const handleMouseDown = () => {
     isDrawing.current = true;

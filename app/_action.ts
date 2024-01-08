@@ -54,8 +54,15 @@ export async function createBoardAction({
 export async function updateBoardAction(
     id: string,
     update: { title?: string; drawings?: any[], lastModifiedTime?: Date, ownerId?: string },
+    dataUri: string,
     path: string
 ) {
+
+    const split = dataUri.split(",");
+    const base64string = split[1];
+    const buffer = Buffer.from(base64string, "base64");
+    update['thumbnail'] = buffer;
+
     await updateBoard(id, update);
     revalidatePath(path);
 }

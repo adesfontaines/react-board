@@ -35,6 +35,7 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
     // Function to handle board initialization and other logic
     async function initializeBoard(): Promise<void> {
       getBoardByIdAction({ ownerId: "", id: id, path: "/" }).then((data) => {
+        console.log(data);
         if (data.board && !data.error) {
           const sanitizedBoard = {
             ...data.board,
@@ -51,11 +52,19 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
     async function saveBoard(): Promise<void> {
       if (!board) return;
 
+      const uri = drawingZoneRef.current.getCanvasURL();
+
       const updatedBoard = board;
       updatedBoard.drawings = forms!;
+
       setBoard(updatedBoard);
+      await updateBoardAction(
+        updatedBoard._id.toString(),
+        updatedBoard,
+        uri,
+        "/"
+      );
       setIsEdited(false);
-      await updateBoardAction(updatedBoard._id.toString(), board, "/");
     }
 
     if (board == null) initializeBoard();
@@ -106,5 +115,5 @@ export default function Whiteboard({ params: { lng, id } }: { params: any }) {
         ></ZoomBar>
       </main>
     );
-  else <h1>BOARD NOT FOUND</h1>;
+  else "<h1>LOADING...</h1>";
 }

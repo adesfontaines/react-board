@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Link } from "nextjs13-progress";
 import { Popover, PopoverContent, PopoverTrigger } from "./popOver";
 import { PiDotsThreeBold, PiTrash, PiPencil } from "react-icons/pi";
@@ -17,7 +18,14 @@ const ExistingBoard: React.FC<{
   return (
     <Link href={"/whiteboards/" + board.id} locale={lng}>
       <div className="shadow-md rounded hover:ring-4 w-60 h-44 bg-white text-black flex flex-col font-semibold relative">
-        <div className="rounded-t w-full bg-gray-300 h-40" />
+        <Image
+          alt="thumbnail"
+          priority={true}
+          className="object-contain rounded-t w-full bg-gray-300 h-32"
+          width={240}
+          height={124}
+          src={"data:image/png;base64," + board.thumbnail}
+        />
         <div className="p-2 shadow-inner">
           <h3 className="text-sm">
             {board.title == "Untitled" ? t("untitled") : board.title}

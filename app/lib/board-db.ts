@@ -35,7 +35,9 @@ export async function getBoards(filter: BoardFilter) {
 export async function createBoard(title: string, ownerId: string) {
     try {
         await connectDB();
-        const board = await Board.create({ title, ownerId, createdTime: Date.now(), lastModifiedTime: Date.now() });
+
+        const blankThumbnail = Buffer.from("R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=", 'base64');
+        const board = await Board.create({ title, ownerId, createdTime: Date.now(), lastModifiedTime: Date.now(), thumbnail: blankThumbnail });
         return {
             board,
         };
@@ -69,7 +71,7 @@ export async function getBoard(id: string) {
 
 export async function updateBoard(
     id: string,
-    { title, drawings }: { title?: string; drawings?: any[] }
+    { title, drawings, thumbnail }: { title?: string; drawings?: any[], thumbnail: Buffer }
 ) {
     try {
         await connectDB();
@@ -81,7 +83,7 @@ export async function updateBoard(
         }
         const board = await Board.findByIdAndUpdate(
             parsedId,
-            { title, drawings, lastModifiedTime: Date.now() },
+            { title, drawings, thumbnail, lastModifiedTime: Date.now() },
             { new: true }
         )
             .lean()

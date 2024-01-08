@@ -2,7 +2,6 @@ import {
   ModelOptions,
   Severity,
   getModelForClass,
-  index,
   post,
   prop,
 } from "@typegoose/typegoose";
@@ -44,6 +43,8 @@ class BoardClass {
   lastModifiedTime: Date;
   @prop({ default: false })
   isShared: boolean;
+  @prop()
+  thumbnail: Buffer;
   @prop()
   drawings: any[];
   @prop({ default: false })
