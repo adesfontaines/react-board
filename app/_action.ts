@@ -61,9 +61,8 @@ export async function updateBoardAction(
     const split = dataUri.split(",");
     const base64string = split[1];
     const buffer = Buffer.from(base64string, "base64");
-    update['thumbnail'] = buffer;
 
-    await updateBoard(id, update);
+    await updateBoard(id, update, buffer);
     revalidatePath(path);
 }
 
