@@ -3,7 +3,7 @@
 import LocalePicker from "../components/localePicker";
 import WhiteboardList from "../components/whiteboardList";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata() {
   return {
     title: "Next Whiteboard",
   };
