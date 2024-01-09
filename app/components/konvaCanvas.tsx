@@ -218,7 +218,7 @@ const KonvaCanvas: React.ForwardRefRenderFunction<any, DrawingZoneProps> = (
             key={key}
             points={value.points}
             stroke={value.color}
-            strokeWidth={value.size}
+            strokeWidth={value.tool == Tools.Eraser ? 18 : value.size}
             tension={0.5}
             lineCap="round"
             lineJoin="round"

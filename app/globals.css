@@ -70,14 +70,12 @@ body {
 }
 
 .dot {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 8px;
-  height: 8px;
-  background-color: black;
-  border-radius: 100%;
   transform: translate(-50%, -50%);
-  z-index: 8;
-  pointer-events: none;
+}
+
+.Dialog {
+  margin: 15px;
+  background-color: white;
+  padding: 15px;
+  border-radius: 4px;
 }

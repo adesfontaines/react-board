@@ -35,5 +35,7 @@
     "resetZoom": "Reset zoom",
     "untitled": "Untitled",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "rename": "Rename",
+    "renameBoard": "Rename whiteboard"
 }

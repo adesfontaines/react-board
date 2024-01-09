@@ -9,7 +9,7 @@ import {
   FloatingPortal,
   FloatingFocusManager,
   FloatingOverlay,
-  useId
+  useId,
 } from "@floating-ui/react";
 
 interface DialogOptions {
@@ -21,7 +21,7 @@ interface DialogOptions {
 export function useDialog({
   initialOpen = false,
   open: controlledOpen,
-  onOpenChange: setControlledOpen
+  onOpenChange: setControlledOpen,
 }: DialogOptions = {}) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(initialOpen);
   const [labelId, setLabelId] = React.useState<string | undefined>();
@@ -34,13 +34,13 @@ export function useDialog({
 
   const data = useFloating({
     open,
-    onOpenChange: setOpen
+    onOpenChange: setOpen,
   });
 
   const context = data.context;
 
   const click = useClick(context, {
-    enabled: controlledOpen == null
+    enabled: controlledOpen == null,
   });
   const dismiss = useDismiss(context, { outsidePressEvent: "mousedown" });
   const role = useRole(context);
@@ -56,7 +56,7 @@ export function useDialog({
       labelId,
       descriptionId,
       setLabelId,
-      setDescriptionId
+      setDescriptionId,
     }),
     [open, setOpen, interactions, data, labelId, descriptionId]
   );
@@ -107,11 +107,6 @@ export const DialogTrigger = React.forwardRef<
   const context = useDialogContext();
   const childrenRef = (children as any).ref;
   const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
-  const [isMounted, setIsMounted] = React.useState(false);
-  
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   // `asChild` allows the user to pass any element as the anchor
   if (asChild && React.isValidElement(children)) {
@@ -121,13 +116,12 @@ export const DialogTrigger = React.forwardRef<
         ref,
         ...props,
         ...children.props,
-        "data-state": context.open ? "open" : "closed"
+        "data-state": context.open ? "open" : "closed",
       })
     );
   }
 
   return (
-    isMounted ?
     <button
       ref={ref}
       // The user can style the trigger based on the state
@@ -135,7 +129,7 @@ export const DialogTrigger = React.forwardRef<
       {...context.getReferenceProps(props)}
     >
       {children}
-    </button> : ''
+    </button>
   );
 });
 
@@ -150,7 +144,10 @@ export const DialogContent = React.forwardRef<
 
   return (
     <FloatingPortal>
-      <FloatingOverlay className="Dialog-overlay" lockScroll>
+      <FloatingOverlay
+        className="backdrop-blur-sm grid place-items-center z-10"
+        lockScroll
+      >
         <FloatingFocusManager context={floatingContext}>
           <div
             ref={ref}
@@ -181,7 +178,12 @@ export const DialogHeading = React.forwardRef<
   }, [id, setLabelId]);
 
   return (
-    <h2 {...props} ref={ref} id={id}>
+    <h2
+      {...props}
+      ref={ref}
+      id={id}
+      className="text-black text-lg pb-2 max-w-prose"
+    >
       {children}
     </h2>
   );

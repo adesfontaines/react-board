@@ -34,5 +34,7 @@
     "resetZoom": "Restablecer zoom",
     "untitled": "Sin título",
     "edit": "Editar",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "rename": "Renombrar",
+    "renameBoard": "Renombrar pizarra"
 }

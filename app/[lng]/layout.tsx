@@ -7,6 +7,7 @@ import { ImGithub } from "react-icons/im";
 import NavigationBar from "../components/navigationBar";
 import NextTopLoader from "nextjs-toploader";
 import Link from "next/link";
+import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,14 +25,14 @@ export default function RootLayout({
   return (
     <NextAuthProvider>
       <html lang={lng} dir={dir(lng)}>
-        <head>
+        <Head>
           <meta charSet="UTF-8" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
           <title>WhiteboardCanvas</title>
-        </head>
+        </Head>
         <body className={inter.className}>
           <NavigationBar
             childleft={

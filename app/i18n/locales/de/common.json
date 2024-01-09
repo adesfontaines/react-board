@@ -34,5 +34,7 @@
     "resetZoom": "Zoom zurücksetzen",
     "untitled": "Ohne Titel",
     "edit": "Bearbeiten",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "rename": "Umbenennen",
+    "renameBoard": "Weißwandtafel umbenennen"
 }

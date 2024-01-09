@@ -31,6 +31,9 @@
     "zoomOut": "ズームアウト",
     "resetZoom": "ズームリセット",
     "untitled": "無題",
-    "edit": "編集",
-    "delete": "削除"
+    "edit": "エディット",
+    "delete": "デリート",
+    "rename": "リネーム",
+    "renameBoard": "ボードのリネーム",
+    "close": "クローズ"
   }

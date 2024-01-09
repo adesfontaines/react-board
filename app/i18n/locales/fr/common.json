@@ -34,5 +34,7 @@
     "resetZoom": "Réinitialiser le zoom",
     "untitled": "Sans titre",
     "edit": "Editer",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "rename": "Renommer",
+    "renameBoard": "Renommer le tableau"
 }
