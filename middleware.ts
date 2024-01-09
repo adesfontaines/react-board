@@ -26,8 +26,12 @@ export default async function middleware(req: NextRequestWithAuth, event: NextFe
   const withAuthMiddleware = withAuth({
     callbacks: {
       authorized: ({ req, token }: any) => {
-        const tokenValue = req.cookies.get("next-auth.session-token")?.value
-        console.log("token:" + tokenValue);
+        const tokenValue = req.cookies.get("next-auth.session-token")?.value;
+
+        // HTTPS Cookie
+        if (!tokenValue)
+          req.cookies.get("__Secure-next-auth.session-token")?.value;
+
         return tokenValue
       }
     },

@@ -105,7 +105,6 @@ export default function SignIn({ params }: { params: any }) {
             >
               {t("signIn")}
             </button>
-            {status}
           </div>
           <p className="mt-4 text-gray-600">
             {t("signUpDescription")}&nbsp;
