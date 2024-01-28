@@ -18,10 +18,6 @@
 </p>
 
 
-#### A free whiteboard solution
-
-This tool provides an easy way to create a GitHub profile readme with the latest add-ons such as `visitors count`, `github stats`, etc.
-
 ## 🚀 Demo
 
 <img alt="Status" src="https://img.shields.io/website?url=https%3A%2F%2Freact-board-lovat.vercel.app%2F&style=flat-square">
@@ -29,9 +25,6 @@ This tool provides an easy way to create a GitHub profile readme with the latest
 [Next Whiteboard](https://react-board-lovat.vercel.app/)
 
 ## 🧐 Features (more coming soon)
-
-Just fill in the details such as `Name`, `Tagline`, `Dev Platforms Username`, `Current Work`, `Portfolio`, `Blog`, etc. with a minimal UI.
-
 - **Create and edit whiteboard**
 
 - **Preview created whiteboard**
